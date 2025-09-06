@@ -5,7 +5,8 @@
 Application is written in python 3. It has general utilities designed for hospitals such as: 
 - managing patient and doctor records, 
 - doctor interfaces for management of checkups and diagnoses, 
-- admin interfaces for managing staff and doctors. 
+- admin interfaces for managing staff and doctors.
+
 System is designed to follow both GDRP and HIPPA regulations by utilizing several encryption and hashing methods. 
 Data storage is done locally with JSON files, however ideally storage would be done using a database. 
 System's security depends on separate client and server, however even though the system's design is open for scalability over the network, it's mainly a standalone application. The focus is security, however efficiency, readability and scalability are a big part in system's design.
@@ -25,54 +26,55 @@ System's security depends on separate client and server, however even though the
 # Functionalities:
 ## Views, Interfaces and Roles:
 == GUI == -> part of the GUI
+
 == Functionality == -> part of the back-end
 
 SysadminUser can manage Lekar & Sysadmin entities, but not with Patient, Pregled and Dijagnoza entities. Here's the SysadminUser view:
 - `SysadminUser`: 
-	- == GUI ==
-	- Sysadmin:
-		- CreateSysadmin()
-		- SearchSysadmin() => ReadSysadmin() => (UpdateSysadmin() | DeleteSysadmin())
-	- Lekar:
-		- CreateLekar()
-		- SearchLekar() => ReadLekar() => (UpdateLekar() | DeleteLekar())
+	- ==GUI==
+	- **Sysadmin**:
+		- `CreateSysadmin()`
+		- `SearchSysadmin()` => `ReadSysadmin()` => (`UpdateSysadmin()` | `DeleteSysadmin()`)
+	- **Lekar**:
+		- `CreateLekar()`
+		- `SearchLekar()` => `ReadLekar()` => (`UpdateLekar()` | `DeleteLekar()`)
 	- == Functionality ==
-	- Sysadmin:
-		- CreateSysadmin() : requires SysadminUser
-		- ReadSysadmin() : requires SysadminUser
-		- UpdateSysadmin() : requires SysadminUser
-		- DeleteSysadmin() : requires SysadminUser
-	- Lekar:
-		- CreateLekar() : requires SysadminUser
-		- ReadLekar() : requires SysadminUser
-		- UpdateLekar() : requires SysadminUser
-		- DeleteLekar() : requires SysadminUser
+	- **Sysadmin**:
+		- `CreateSysadmin()` : *requires **SysadminUser***
+		- `ReadSysadmin()` : *requires **SysadminUser***
+		- `UpdateSysadmin()` : *requires **SysadminUser***
+		- `DeleteSysadmin()` : *requires **SysadminUser***
+	- **Lekar**:
+		- `CreateLekar()` : *requires **SysadminUser***
+		- `ReadLekar()` : *requires **SysadminUser***
+		- `UpdateLekar()` : *requires **SysadminUser***
+		- `DeleteLekar()` : *requires **SysadminUser***
 
 LekarUser cannot manage Lekar entities, but can manage Patient, Pregled and Dijagnoza entities. Here's the LekarUser view:
 - `LekarUser`: 
-	- == GUI ==
-	- Pacijent: 
-		- CreatePacijent() 
-		- SearchPacijent() => ReadPacijent() => (UpdatePacijent() | DeletePacijent())
-	- Pregled: 
-		- CreatePregled() : requires Pacijent
-		- SearchPregled() => ReadPregled() => (DeletePregled() | UpdatePregled() => CRUD Dijagnoza (4)) 
-	- == Functionality ==
-	- Pacijent:
-		- Create() : requires LekarUser
-		- Read() : requires LekarUser
-		- Update() : requires LekarUser
-		- Delete() : requires LekarUser
-	- Pregled:
-		- Create() : requires Lekar, Pacijent, LekarUser
-		- Read() : requires Lekar, Pacijent, LekarUser
-		- Update() : requires Lekar, Pacijent, LekarUser
-		- Delete() : requires Lekar, Pacijent, LekarUser
-	- Dijagnoza:
-		- CreateDijagnoza() : requires Pregled, LekarUser
-		- ReadDijagnoza() : requires Pregled, LekarUser
-		- UpdateDijagnoza() : requires Pregled, LekarUser
-		- DeleteDijagnoza() : requires Pregled, LekarUser
+	- ==GUI==
+	- **Pacijent**: 
+		- `CreatePacijent()`
+		- `SearchPacijent()` => `ReadPacijent()` => (`UpdatePacijent()` | `DeletePacijent()`)
+	- **Pregled**: 
+		- `CreatePregled()` : requires **Pacijent**
+		- `SearchPregled()` => `ReadPregled()` => (`DeletePregled()` | `UpdatePregled()` => `CRUD Dijagnoza` (4)) 
+	- ==Functionality==
+	- **Pacijent**:
+		- `CreatePacijent()` : *requires **LekarUser***
+		- `ReadPacijent()` : *requires **LekarUser***
+		- `UpdatePacijent()` : *requires **LekarUser***
+		- `DeletePacijent()` : *requires **LekarUser***
+	- **Pregled**:
+		- `CreatePregled()` : *requires **Lekar**, **Pacijent**, **LekarUser***
+		- `ReadPregled()` : *requires **Lekar**, **Pacijent**, **LekarUser***
+		- `UpdatePregled()` : *requires **Lekar**, **Pacijent**, **LekarUser***
+		- `DeletePregled()` : *requires **Lekar**, **Pacijent**, **LekarUser***
+	- **Dijagnoza**:
+		- `CreateDijagnoza()` : *requires **Pregled**, **LekarUser***
+		- `ReadDijagnoza()` : *requires **Pregled**, **LekarUser***
+		- `UpdateDijagnoza()` : *requires **Pregled**, **LekarUser***
+		- `DeleteDijagnoza()` : *requires **Pregled**, **LekarUser***
 
 # Login:
 Because we have 2 different access levels there will be two views devided into roles
@@ -96,44 +98,45 @@ For viewing encrypted files roles:
 	2) must two-factor authenticate with company key to alter (create/delete/update) Sysadmin records.
 
 ## GDRP compliance:
-- Data Encryption - AES-GCM with KDF from JMBG or the company key using PBKDF2
-- Access Control - (User password + {/, JMBG, secret key, company key} - F2A)
-- Minimization of Exposure - LekarUser/SysadminUser only have access to records on-demand
-- Right to be forgotten - Delete encrypted data and JMBG hash
-- Data protection by design - Keys, hashes, MFA, multiple layers of encryption, limited access
-- Audit Logs - logging all actions with timestamps (not implemented)
+- **Data Encryption** - AES-GCM with KDF from JMBG or the company key using PBKDF2
+- **Access Control** - (User password + {/, JMBG, secret key, company key} - F2A)
+- **Minimization of Exposure** - LekarUser/SysadminUser only have access to records on-demand
+- **Right to be forgotten** - Delete encrypted data and JMBG hash
+- **Data protection by design** - CIA, Keys, hashes, MFA, multiple layers of encryption, limited access
+- **Audit Logs** - logging all actions with timestamps (*not implemented*)
 
 # Entities & Field Specifications:
-- User
-	- str: username
-	- str: password (hashed with bcrypt)
-- Sysadmin implements User:
-	- str: username (implementation)
-	- str: password (implementation)
-- Lekar implements User:
-	- str: username (implementation)
-	- str: password (implementation)
-	- str: ime (encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key))
-	- str: jmbg (encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key))
-	- str: prezime (encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key))
-	- str: specijalizacija (encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key))
-	- str: salt (base64 encrypted)
-- Pacijent:
-	- str: jmbg (hashed with HMAC using secret key)
-	- str: ime (encryped with PBKDF with Pacijent JMBG & salt)
-	- str: prezime (encryped with PBKDF with Pacijent JMBG & salt)
-	- date: datrodj (encryped with PBKDF with Pacijent JMBG & salt)
-	- str: salt (base64 encrypted)
-- Pregled: 
-	- str: lekar_jmbg (hashed with HMAC with Lekar JMBG & secret key)
-	- str: pacijent_jmbg (hashed HMAC with Pacijent JMBG & secret key)
-	- date: datum (encryped with AES-GCM using {PBKDF2 from Pacijent JMBG} as it's key)
-	- Dijagnoza: dijagnoza
-		- str: sifra (encryped with AES-GCM using {PBKDF2 from Pacijent JMBG} as it's key)
-		- str: naziv (encryped with AES-GCM using {PBKDF2 from Pacijent JMBG} as it's key)
-		- str: opis (encryped with AES-GCM using {PBKDF2 from Pacijent JMBG} as it's key)
+- **User** = **AbstractUser**
+	- `str`: username
+	- `str`: password (*hashed with bcrypt*)
+- **Sysadmin** implements User:
+	- `str`: username (*implementation*)
+	- `str`: password (*implementation*)
+- **Lekar** implements User:
+	- `str`: username (*implementation*)
+	- `str`: password (*implementation*)
+	- `str`: ime (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
+	- `str`: jmbg (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
+	- `str`: prezime (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
+	- `str`: specijalizacija (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
+	- `str`: salt (*base64 encrypted*)
+- **Pacijent**:
+	- `str`: jmbg (*hashed with HMAC using secret key*)
+	- `str`: ime (*encryped with PBKDF with Pacijent JMBG & salt*)
+	- `str`: prezime (*encryped with PBKDF with Pacijent JMBG & salt*)
+	- `date`: datrodj (*encryped with PBKDF with Pacijent JMBG & salt*)
+	- `str`: salt (*base64 encrypted*)
+- **Pregled**: 
+	- `str`: lekar_jmbg (*hashed with HMAC with Lekar JMBG & secret key*)
+	- `str`: pacijent_jmbg (*hashed HMAC with Pacijent JMBG & secret key*)
+	- `date`: datum (*encryped with AES-GCM using {PBKDF2 from Pacijent JMBG} as it's key*)
+	- **Dijagnoza**: dijagnoza
+		- `str`: sifra (*encryped with AES-GCM using {PBKDF2 from Pacijent JMBG} as it's key*)
+		- `str`: naziv (*encryped with AES-GCM using {PBKDF2 from Pacijent JMBG} as it's key*)
+		- `str`: opis (*encryped with AES-GCM using {PBKDF2 from Pacijent JMBG} as it's key*)
 
-# Env Variables: / This would go on the server, but client and server are kinda the same thing in this application
+# Env Variables:
+This would go on the server, but client and server are kinda the same thing in this application.
 - str: company_key (base64 encoded)
 - str: secret (base64 encoded)
 
@@ -141,18 +144,18 @@ For viewing encrypted files roles:
 # Specification
 ## Abstract Classes
 ```python
-class AbstractUser(ABC)
+class AbstractUser(ABC):
 ```
 ## Classes
 ```python
-class SysadminUser(AbstractUser)
-class LekarUser(AbstractUser)
+class SysadminUser(AbstractUser):
+class LekarUser(AbstractUser):
 ```
 ## DataClasses
 ```python
-class Lekar()
-class Pacijent()
-class Pregled()
+class Lekar():
+class Pacijent():
+class Pregled():
 ```
 ## General
 ```python
@@ -163,93 +166,93 @@ def ValidatePassword(username: str, password: str, role: str) -> bool: # Checks 
 ## AbstractUser / User
 ```python
 @abstractmethod
-def __init__(self, username: str, password: str)
+def __init__(self, username: str, password: str):
 @abstractmethod
-def GetSecretKey(self) -> str
+def GetSecretKey(self) -> str:
 @abstractmethod
-def LoadSecretKey(self) -> bool
+def LoadSecretKey(self) -> bool:
 @abstractmethod
-def CheckSecretKey(self, key: str) -> bool
+def CheckSecretKey(self, key: str) -> bool:
 @abstractmethod
-def ValidatePassword(self, password: str) -> bool # Validates password
+def ValidatePassword(self, password: str) -> bool: # Validates password
 ```
 ## SysadminUser
 ```python
 # Implementations - Sysadmin
-def SearchSysadmins(self) -> list # Returns a list of all Sysadmins usernames
-def FindSysadmin(self, username: str) -> bool # Returns if a Sysadmin exists
-def EncryptSysadminDictionary(self, data: dict, key: str) -> dict
-def DecryptSysadminDictionary(self, encrypted_data: dict, key: str) -> dict
+def SearchSysadmins(self) -> list: # Returns a list of all Sysadmins usernames
+def FindSysadmin(self, username: str) -> bool: # Returns if a Sysadmin exists
+def EncryptSysadminDictionary(self, data: dict, key: str) -> dict:
+def DecryptSysadminDictionary(self, encrypted_data: dict, key: str) -> dict:
 # Implementations - Lekar
-def SearchLekari(self) -> list # Returns a list of all Lekar usernames
-def FindLekar(self, username: str) -> bool # Returns if a Lekar exists
-def EncryptLekarDictionary(self, data: dict, key: str) -> dict
-def DecryptLekarDictionary(self, encrypted_data: dict, key: str) -> dict
+def SearchLekari(self) -> list: # Returns a list of all Lekar usernames
+def FindLekar(self, username: str) -> bool: # Returns if a Lekar exists
+def EncryptLekarDictionary(self, data: dict, key: str) -> dict:
+def DecryptLekarDictionary(self, encrypted_data: dict, key: str) -> dict:
 # CRUD - Sysadmin
-def CreateSysadmin(self, admin: Sysadmin) -> bool # Encrypts Sysadmin and writes to file. Returns success
-def ReadSysadmin(self, username: str, key: str) -> dict | None # Loads sysadmin from memory
-def UpdateSysadmin(self, key: str) -> bool # Returns success
-def DeleteSysadmin(self, username: str) -> bool # Returns success
+def CreateSysadmin(self, admin: Sysadmin) -> bool: # Encrypts Sysadmin and writes to file. Returns success
+def ReadSysadmin(self, username: str, key: str) -> dict | None: # Loads sysadmin from memory
+def UpdateSysadmin(self, key: str) -> bool: # Returns success
+def DeleteSysadmin(self, username: str) -> bool: # Returns success
 # CRUD - Lekar
-def CreateLekar(self, lekar: Lekar) -> bool # Encrypts Lekar and writes to file. Returns success
-def ReadLekar(self, username: str, key: str) -> dict | None # Loads lekar from memory
-def UpdateLekar(self, key: str) -> bool # Returns success
-def DeleteLekar(self, username: str) -> bool # Returns success
+def CreateLekar(self, lekar: Lekar) -> bool: # Encrypts Lekar and writes to file. Returns success
+def ReadLekar(self, username: str, key: str) -> dict | None: # Loads lekar from memory
+def UpdateLekar(self, key: str) -> bool: # Returns success
+def DeleteLekar(self, username: str) -> bool: # Returns success
 ```
 ## LekarUser
 ```python
 # Implementations - Pacijent
-def FindPacijent(self, username: str) -> bool # Returns if a Pacijent exists
-def EncryptPacijentDictionary(self, data: dict, key: str) -> dict
-def DecryptPacijentDictionary(self, encrypted_data: dict, key: str) -> dict
+def FindPacijent(self, username: str) -> bool: # Returns if a Pacijent exists
+def EncryptPacijentDictionary(self, data: dict, key: str) -> dict:
+def DecryptPacijentDictionary(self, encrypted_data: dict, key: str) -> dict:
 # Implementations - Pregled
-def FindPregled(self, username: str) -> bool # Returns if a Pregled exists
-def EncryptPregledDictionary(self, data: dict, key: str) -> dict
-def DecryptPregledDictionary(self, encrypted_data: dict, key: str) -> dict
+def FindPregled(self, username: str) -> bool: # Returns if a Pregled exists
+def EncryptPregledDictionary(self, data: dict, key: str) -> dict:
+def DecryptPregledDictionary(self, encrypted_data: dict, key: str) -> dict:
 # Implementations - Dijagnoza
-def FindDijagnoza(self, username: str) -> bool # Returns if a Dijagnoza exists
-def EncryptDijagnozaDictionary(self, data: dict, key: str) -> dict
-def DecryptDijagnozaDictionary(self, encrypted_data: dict, key: str) -> dict
+def FindDijagnoza(self, username: str) -> bool: # Returns if a Dijagnoza exists
+def EncryptDijagnozaDictionary(self, data: dict, key: str) -> dict:
+def DecryptDijagnozaDictionary(self, encrypted_data: dict, key: str) -> dict:
 # CRUD - Pacijent
-def CreatePacijent(self, pacijent: Pacijent) -> bool # Encrypts Pacijent and writes to file. Returns success
-def ReadPacijent(self, username: str, key: str) -> dict | None # Loads Pacijent from memory
-def UpdatePacijent(self, key: str) -> bool # Returns success
-def DeletePacijent(self, username: str) -> bool # Returns success
+def CreatePacijent(self, pacijent: Pacijent) -> bool: # Encrypts Pacijent and writes to file. Returns success
+def ReadPacijent(self, username: str, key: str) -> dict | None: # Loads Pacijent from memory
+def UpdatePacijent(self, key: str) -> bool: # Returns success
+def DeletePacijent(self, username: str) -> bool: # Returns success
 # CRUD - Pregled
-def CreatePregled(self, pregled: Pregled) -> bool # Encrypts Pregled and writes to file. Returns success
-def ReadPregled(self, username: str, key: str) -> dict | None # Loads pregled from memory
-def UpdatePregled(self, key: str) -> bool # Returns success
-def DeletePregled(self, username: str) -> bool # Returns success
+def CreatePregled(self, pregled: Pregled) -> bool: # Encrypts Pregled and writes to file. Returns success
+def ReadPregled(self, username: str, key: str) -> dict | None: # Loads pregled from memory
+def UpdatePregled(self, key: str) -> bool: # Returns success
+def DeletePregled(self, username: str) -> bool: # Returns success
 # CRUD - Dijagnoza
-def CreateDijagnoza(self, dijagnoza: Dijagnoza) -> bool # Encrypts Dijagnoza and writes to file. Returns success
-def ReadDijagnoza(self, username: str, key: str) -> dict | None # Loads dijagnoza from memory
-def UpdateDijagnoza(self, key: str) -> bool # Returns success
-def DeleteDijagnoza(self, username: str) -> bool # Returns success
+def CreateDijagnoza(self, dijagnoza: Dijagnoza) -> bool: # Encrypts Dijagnoza and writes to file. Returns success
+def ReadDijagnoza(self, username: str, key: str) -> dict | None: # Loads dijagnoza from memory
+def UpdateDijagnoza(self, key: str) -> bool: # Returns success
+def DeleteDijagnoza(self, username: str) -> bool: # Returns success
 ```
 
 ## Sysadmin
 ```python
 # Constructors
-def __init__(self, data: dict) # Sysadmin wrapper data is encrypted
-def __init__(self, username: str, password: str) # Sysadmin wrapper data is unencrypted
+def __init__(self, data: dict): # Sysadmin wrapper data is encrypted
+def __init__(self, username: str, password: str): # Sysadmin wrapper data is unencrypted
 ```
 ## Lekar
 ```python
 # Constructors
-def __init__(self, data: dict) # . wrapper data is encrypted
-def __init__(self, fields) # . wrapper data is unencrypted
+def __init__(self, data: dict): # Lekar wrapper data is encrypted
+def __init__(self, fields): # Lekar wrapper data is unencrypted
 ```
 
 ## Pacijent
 ```python
-def __init__(self, data: dict) # . wrapper data is encrypted
-def __init__(self, fields) # . wrapper data is unencrypted
+def __init__(self, data: dict): # Lekar wrapper data is encrypted
+def __init__(self, fields): # Lekar wrapper data is unencrypted
 ```
 
 ## Pregled
 ```python
-def __init__(self, data: dict) # . wrapper data is encrypted
-def __init__(self, fields) # . wrapper data is unencrypted
+def __init__(self, data: dict): # Lekar wrapper data is encrypted
+def __init__(self, fields): # Lekar wrapper data is unencrypted
 ```
 
 # GUI
