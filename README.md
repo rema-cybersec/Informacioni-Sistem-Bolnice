@@ -1,5 +1,5 @@
 # Sistem Bolnice
-## by: Marko Rodic 102/23, http://www.dmi.pmf.uns.ac.rs/
+## by: Marko Rodic 102/23, https://www.dmi.uns.ac.rs/
 
 # Intro
 Application is written in python 3. It has general utilities designed for hospitals such as: 
@@ -137,8 +137,8 @@ For viewing encrypted files roles:
 
 # Env Variables:
 This would go on the server, but client and server are kinda the same thing in this application.
-- str: company_key (base64 encoded)
-- str: secret (base64 encoded)
+- `str`: company_key (*base64 encoded*)
+- `str`: secret (*base64 encoded*)
 
 
 # Specification
