@@ -1,6 +1,10 @@
 [
     {
-    "username": "admin",
-    "password": "$2b$12$WPImZf0Zq9BL5Eyg5ciY5eJax/YnlEvW//ziLvvNMLnCHhPcgexwi"
+        "username": "admin",
+        "password": "$2b$12$WPImZf0Zq9BL5Eyg5ciY5eJax/YnlEvW//ziLvvNMLnCHhPcgexwi"
+    },
+    {
+        "username": "rema",
+        "password": ""
     }
 ]

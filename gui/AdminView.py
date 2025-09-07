@@ -1,4 +1,7 @@
 import customtkinter as ctk
+from config import ADMINS_JSON_PATH, LEKARI_JSON_PATH
+import json
+from gui.AdminViewFind import start_session
 
 class AdminView(ctk.CTkToplevel):
     WINDOW_WIDTH=800
@@ -26,10 +29,21 @@ class AdminView(ctk.CTkToplevel):
         self.tabview.add("Admini")
         self.tabview.add("Lekari")
 
-        self.search_button = ctk.CTkButton(master=self, corner_radius=15, width=10, text="Search")
+        self.tabview.tab("Admini").grid_columnconfigure(0, weight=1)
+        self.tabview.tab("Lekari").grid_columnconfigure(0, weight=1)
+        self.tabview.tab("Admini").grid_rowconfigure(0, weight=1)
+        self.tabview.tab("Lekari").grid_rowconfigure(0, weight=1)
+
+        self.tab_label_admini = ctk.CTkLabel(master=self.tabview.tab("Admini"), text="Click search to start!")
+        self.tab_label_admini.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
+
+        self.tab_label_lekari = ctk.CTkLabel(master=self.tabview.tab("Lekari"), text="Click search to start!")
+        self.tab_label_lekari.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
+
+        self.search_button = ctk.CTkButton(master=self, corner_radius=15, width=10, text="Search", command=self.search_users)
         self.search_button.grid(row=2, column=1, padx=(10, 10), pady=(10, 10), sticky="sw")
 
-        self.find_button = ctk.CTkButton(master=self, corner_radius=15, width=10, text="Find")
+        self.find_button = ctk.CTkButton(master=self, corner_radius=15, width=10, text="Find", command=self.view_records)
         self.find_button.grid(row=2, column=2, padx=(10, 10), pady=(10, 10), sticky="sw")
 
         self.add_button = ctk.CTkButton(master=self, corner_radius=15, width=10, text="Add")
@@ -47,8 +61,10 @@ class AdminView(ctk.CTkToplevel):
         self.welcome_label = ctk.CTkLabel(master=self.sidebar, text="logged in as:")
         self.welcome_label.grid(row=0, column=0, padx=(5, 10), pady=(5, 5))
 
-        self.user_label = ctk.CTkLabel(master=self.sidebar, text=self.user.username, font=ctk.CTkFont(size=20, weight="bold"))
-        self.user_label.grid(row=1, column=0, padx=20, pady=(10, 10))
+        self.title_frame = ctk.CTkFrame(master=self.sidebar)
+        self.title_frame.grid(row=1, column=0, padx=20, pady=20)
+        self.user_label = ctk.CTkLabel(master=self.title_frame, text=self.user.username, font=ctk.CTkFont(size=20, weight="bold"))
+        self.user_label.grid(row=0, column=0, padx=20, pady=(10, 10))
 
         self.change_password = ctk.CTkButton(master=self.sidebar, corner_radius=15, text="change password")
         self.change_password.grid(row=3, column=0, padx=20, pady=(20, 10), sticky="sw")
@@ -67,7 +83,32 @@ class AdminView(ctk.CTkToplevel):
         self.destroy()
 
     def quit_app(self):
-        self.master.destroy()
+        self.app.app.destroy()
+    
+    def search_users(self):
+        if self.tabview.get() == "Admini":
+            out = ""
+            with open(ADMINS_JSON_PATH, 'r') as file:
+                data = json.load(file)
+            for admin in data:
+                out += admin["username"] + "\n"
+            if out == "":
+                out = "Nothing found."
+            self.tab_label_admini.configure(text=out)
+        elif self.tabview.get() == "Lekari":
+            out = ""
+            with open(LEKARI_JSON_PATH, 'r') as file:
+                data = json.load(file)
+            for lekar in data:
+                out += lekar["username"] + "\n"
+            if out == "":
+                out = "Nothing found."
+            self.tab_label_lekari.configure(text=out)
+        else:
+            self.tab_label_admini.configure(text=out)
+            self.tab_label_lekari.configure(text=out)
+    def view_records(self):
+        start_session(self)
 
 def setup():
     ctk.set_appearance_mode("Dark")

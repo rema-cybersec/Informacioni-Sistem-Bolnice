@@ -69,7 +69,7 @@ class LoginWindow(ctk.CTkToplevel):
             self.show_error_text()
     
     def quit_app(self):
-        self.master.destroy()
+        self.app.app.destroy()
             
     
     def clear_children(self):
