@@ -27,3 +27,7 @@ SYSADMIN_USER_PATH = os.path.join(USERS_DIR, 'SysadminUser.py')
 
 # Utilities Directory
 UTILS_DIR = os.path.join(BASE_DIR, 'utils')
+KEYS_DIR = os.path.join(UTILS_DIR, 'keys')
+COMPANY_KEY_GPG_PATH = os.path.join(KEYS_DIR, 'company_key.gpg')
+SECRET_KEY_GPG_PATH = os.path.join(KEYS_DIR, 'secret_key.gpg')
+TEST_PY_PATH = os.path.join(UTILS_DIR, 'test.py')
