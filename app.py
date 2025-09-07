@@ -1,5 +1,9 @@
+import gui.login as login
+
 def main():
-    print("maintenance...")
+    login.setup()
+    app = login.LoginWindow()
+    app.mainloop()
 
 
 if __name__ == "__main__":
