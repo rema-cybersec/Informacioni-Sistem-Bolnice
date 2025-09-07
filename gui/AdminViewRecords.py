@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from config import ADMINS_JSON_PATH, LEKARI_JSON_PATH, COMPANY_KEY_GPG_PATH
 import json
+import base64
 
 class AdminViewRecords(ctk.CTkToplevel):
     WINDOW_WIDTH = 400
@@ -31,9 +32,37 @@ class AdminViewRecords(ctk.CTkToplevel):
         self.cancel_button = ctk.CTkButton(master=self, corner_radius=15, width=10, text="Cancel", command=self.quit_app)
         self.cancel_button.grid(row=4, column=0, padx=(10, 10), pady=(10, 10), sticky="sw")
 
-        self.confirm_button = ctk.CTkButton(master=self, corner_radius=15, width=10, text="View")
+        self.confirm_button = ctk.CTkButton(master=self, corner_radius=15, width=10, text="View", command=self.view_records)
         self.confirm_button.grid(row=4, column=2, padx=(10, 10), pady=(10, 10), sticky="se")
     
+    def find_record(self):
+        with open(ADMINS_JSON_PATH, 'r') as file:
+            data = json.load(file)
+        for admin in data:
+            if admin["username"] == self.username_entry.get().strip():
+                return admin
+        with open(LEKARI_JSON_PATH, 'r') as file:
+            data = json.load(file)
+        for lekar in data:
+            if lekar["username"] == self.username_entry.get().strip():
+                return lekar
+        return None
+
+    def view_records(self):
+        record = self.find_record()
+        key = self.key_entry.get().strip()
+        if self.validate_key(key):
+            self.show_record(record, key)
+    
+    def validate_key(self, key_guess):
+        with open(COMPANY_KEY_GPG_PATH, 'r') as file:
+            key = file.read()
+        if base64.b64encode(key_guess.encode("utf-8")) == key.encode("utf-8"):
+            return True
+        return False
+    
+    def show_record(self, record):
+        print(record)
 
     def quit_app(self):
         self.destroy()
