@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from config import ADMINS_JSON_PATH, LEKARI_JSON_PATH
 import json
-from gui.AdminViewFind import start_session
+from gui.AdminViewRecords import start_session
 
 class AdminView(ctk.CTkToplevel):
     WINDOW_WIDTH=800

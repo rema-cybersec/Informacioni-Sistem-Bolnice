@@ -19,7 +19,7 @@ SYSADMIN_CLASS_PATH = os.path.join(ENTITIES_DIR, 'Sysadmin.py')
 GUI_DIR = os.path.join(BASE_DIR, 'gui')
 LOGIN_PAGE_PATH = os.path.join(GUI_DIR, 'Login.py')
 ADMINVIEW_PATH = os.path.join(GUI_DIR, 'AdminView.py')
-ADMINVIEWFIND_PAGE_PATH = os.path.join(GUI_DIR, 'AdminViewFind.py')
+ADMINVIEW_RECORDS_PATH = os.path.join(GUI_DIR, 'AdminViewRecords.py')
 
 # Users Directory
 USERS_DIR = os.path.join(BASE_DIR, 'users')
