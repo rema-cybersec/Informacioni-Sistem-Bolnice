@@ -6,6 +6,8 @@ import base64
 class AdminViewRecords(ctk.CTkToplevel):
     WINDOW_WIDTH = 400
     WINDOW_HEIGHT = 400
+    ERROR_TEXT="Invalid username or password."
+    ERROR_TEXT_COLOR=("red", "#CC0000")
 
     def __init__(self, master):
         super().__init__(master)
@@ -29,6 +31,10 @@ class AdminViewRecords(ctk.CTkToplevel):
         self.key_entry = ctk.CTkEntry(self, placeholder_text="company key", show="#")
         self.key_entry.grid(row=2, column=0, columnspan=3, padx=(20, 20), pady=10, sticky="new")
 
+        # Placeholder Frame for Error Text
+        self.placeholder_frame = ctk.CTkFrame(master=self, fg_color="transparent")
+        self.placeholder_frame.grid(row=3, column=0, columnspan=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
+
         self.cancel_button = ctk.CTkButton(master=self, corner_radius=15, width=10, text="Cancel", command=self.quit_app)
         self.cancel_button.grid(row=4, column=0, padx=(10, 10), pady=(10, 10), sticky="sw")
 
@@ -50,9 +56,14 @@ class AdminViewRecords(ctk.CTkToplevel):
 
     def view_records(self):
         record = self.find_record()
-        key = self.key_entry.get().strip()
-        if self.validate_key(key):
-            self.show_record(record, key)
+        if record == None:
+            self.show_error_text()
+        else:
+            key = self.key_entry.get().strip()
+            if self.validate_key(key):
+                self.show_record(record, key)
+            else:
+                self.show_error_text()
     
     def validate_key(self, key_guess):
         with open(COMPANY_KEY_GPG_PATH, 'r') as file:
@@ -61,11 +72,15 @@ class AdminViewRecords(ctk.CTkToplevel):
             return True
         return False
     
-    def show_record(self, record):
+    def show_record(self, record, key):
         print(record)
 
     def quit_app(self):
         self.destroy()
+    
+    def show_error_text(self):
+        self.error_label = ctk.CTkLabel(master=self.placeholder_frame, text=self.ERROR_TEXT, text_color=self.ERROR_TEXT_COLOR)
+        self.error_label.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
 def start_session(master):
     app = AdminViewRecords(master)
