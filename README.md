@@ -115,25 +115,28 @@ For viewing encrypted files roles:
 - **Lekar** implements User:
 	- `str`: username (*implementation*)
 	- `str`: password (*implementation*)
-	- `str`: ime (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
-	- `str`: jmbg (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
-	- `str`: prezime (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
-	- `str`: specijalizacija (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
+	- encrypted fields:
+		- `str`: ime (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
+		- `str`: jmbg (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
+		- `str`: prezime (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
+		- `str`: specijalizacija (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
 	- `str`: salt (*base64 encrypted*)
 - **Pacijent**:
 	- `str`: jmbg (*hashed with HMAC using secret key*)
-	- `str`: ime (*encryped with PBKDF with Pacijent JMBG & salt*)
-	- `str`: prezime (*encryped with PBKDF with Pacijent JMBG & salt*)
-	- `date`: datrodj (*encryped with PBKDF with Pacijent JMBG & salt*)
+	- encrypted fields
+		- `str`: ime (*encryped with PBKDF with Pacijent JMBG & salt*)
+		- `str`: prezime (*encryped with PBKDF with Pacijent JMBG & salt*)
+		- `date`: datrodj (*encryped with PBKDF with Pacijent JMBG & salt*)
 	- `str`: salt (*base64 encrypted*)
 - **Pregled**: 
 	- `str`: lekar_jmbg (*hashed with HMAC with Lekar JMBG & secret key*)
 	- `str`: pacijent_jmbg (*hashed HMAC with Pacijent JMBG & secret key*)
-	- `date`: datum (*encryped with AES-GCM using {PBKDF2 from Pacijent JMBG} as it's key*)
-	- **Dijagnoza**: dijagnoza
-		- `str`: sifra (*encryped with AES-GCM using {PBKDF2 from Pacijent JMBG} as it's key*)
-		- `str`: naziv (*encryped with AES-GCM using {PBKDF2 from Pacijent JMBG} as it's key*)
-		- `str`: opis (*encryped with AES-GCM using {PBKDF2 from Pacijent JMBG} as it's key*)
+	- encrypted fields:
+		- `date`: datum (*encryped with AES-GCM using {PBKDF2 from Pacijent JMBG} as it's key*)
+		- **Dijagnoza**: dijagnoza
+			- `str`: sifra (*encryped with AES-GCM using {PBKDF2 from Pacijent JMBG} as it's key*)
+			- `str`: naziv (*encryped with AES-GCM using {PBKDF2 from Pacijent JMBG} as it's key*)
+			- `str`: opis (*encryped with AES-GCM using {PBKDF2 from Pacijent JMBG} as it's key*)
 
 # Env Variables:
 This would go on the server, but client and server are kinda the same thing in this application.
