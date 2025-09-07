@@ -2,16 +2,22 @@ import customtkinter as ctk
 import json
 from bcrypt import checkpw
 from config import ADMINS_JSON_PATH, LEKARI_JSON_PATH
+from users.SysadminUser import SysadminUser
+from gui.AdminView import start_admin_session
 
-class LoginWindow(ctk.CTk):
+class LoginWindow(ctk.CTkToplevel):
     WINDOW_WIDTH=400
     WINDOW_HEIGHT=350
-    def __init__(self):
-        super().__init__()
+    ERROR_TEXT="Invalid username or password."
+    ERROR_TEXT_COLOR=("red", "#CC0000")
+
+    def __init__(self, master):
+        super().__init__(master)
 
         # Configuration
         self.title("Login")
         self.geometry(f"{self.WINDOW_WIDTH}x{self.WINDOW_HEIGHT}")
+        self.protocol("WM_DELETE_WINDOW", self.quit_app)
 
         # Grid Configuration - 4x5
         self.grid_columnconfigure((0, 2), weight=1)
@@ -40,9 +46,14 @@ class LoginWindow(ctk.CTk):
                 admins_data = json.load(file)
             for admin in admins_data:
                 if admin["username"] == self.username_entry.get().strip():
-                    if checkpw(self.password_entry.get().strip().encode('utf-8'), admin["password"].encode('utf-8')):
+                    user = SysadminUser(admin["username"], self.password_entry.get().strip())
+                    if user.ValidatePassword(admin):
                         self.error_label = ctk.CTkLabel(master=self.placeholder_frame, text="Welcome, Admin.", text_color=("green", "#00CC00"))
                         self.error_label.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
+                        
+                        self.withdraw()
+                        start_admin_session(self.master, validated=True)
+
                         return
             with open(LEKARI_JSON_PATH, 'r') as file:
                     lekari_data = json.load(file)
@@ -52,22 +63,23 @@ class LoginWindow(ctk.CTk):
                         self.error_label = ctk.CTkLabel(master=self.placeholder_frame, text="Welcome, Lekar.", text_color=("green", "#00CC00"))
                         self.error_label.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
                         return
-            self.error_label = ctk.CTkLabel(master=self.placeholder_frame, text="Invalid username or password.", text_color=("red", "#CC0000"))
-            self.error_label.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
+            self.show_error_text()
         else:
             print("Entry empty")
-            self.error_label = ctk.CTkLabel(master=self.placeholder_frame, text="Invalid username or password.", text_color=("red", "#CC0000"))
-            self.error_label.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
+            self.show_error_text()
+    
+    def quit_app(self):
+        self.master.destroy()
+            
     
     def clear_children(self):
         for child in self.placeholder_frame.winfo_children():
             child.destroy()
+    def show_error_text(self):
+        self.error_label = ctk.CTkLabel(master=self.placeholder_frame, text=self.ERROR_TEXT, text_color=self.ERROR_TEXT_COLOR)
+        self.error_label.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
+
 
 def setup():
     ctk.set_appearance_mode("Dark")
     ctk.set_default_color_theme("blue")
-
-if __name__ == "__main__":
-    setup()
-    app = LoginWindow()
-    app.mainloop()

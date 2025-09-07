@@ -1,7 +1,6 @@
-from User import User
+from users.User import User
 from config import ADMINS_JSON_PATH, COMPANY_KEY_GPG_PATH
 from bcrypt import checkpw
-import json
 import base64
 
 class SysadminUser(User):
@@ -22,13 +21,7 @@ class SysadminUser(User):
             return True
         return False
 
-    def ValidatePassword(self, password: str) -> bool:
-        with open(ADMINS_JSON_PATH, 'r') as file:
-            data = json.dump(file);
-        for admin in data:
-            if admin["username"] == self.username:
-                if checkpw(password.encode('utf-8'), admin["password"].encode('utf-8')):
-                    return True
-            else:
-                return False
+    def ValidatePassword(self, admin_data: dict) -> bool:
+        if checkpw(self.password.encode('utf-8'), admin_data["password"].encode('utf-8')):
+            return True
         return False

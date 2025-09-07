@@ -17,7 +17,7 @@ SYSADMIN_CLASS_PATH = os.path.join(ENTITIES_DIR, 'Sysadmin.py')
 
 # GUI Directory
 GUI_DIR = os.path.join(BASE_DIR, 'gui')
-LOGIN_PAGE_PATH = os.path.join(GUI_DIR, 'login.py')
+LOGIN_PAGE_PATH = os.path.join(GUI_DIR, 'Login.py')
 
 # Users Directory
 USERS_DIR = os.path.join(BASE_DIR, 'users')
