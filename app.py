@@ -6,14 +6,13 @@ class App:
         self.app = ctk.CTk()
         self.app.withdraw()
         login.setup()
-        self.login_window = login.LoginWindow(self.app)
+        self.login_window = login.LoginWindow(self)
 
     def restore_login(self):
         self.login_window.deiconify()
     
     def run(self):
         self.app.mainloop()
-
 
 def main():
    app = App()

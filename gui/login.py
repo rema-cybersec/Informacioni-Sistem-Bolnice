@@ -11,9 +11,9 @@ class LoginWindow(ctk.CTkToplevel):
     ERROR_TEXT="Invalid username or password."
     ERROR_TEXT_COLOR=("red", "#CC0000")
 
-    def __init__(self, master):
-        super().__init__(master)
-
+    def __init__(self, app):
+        super().__init__(app.app)
+        self.app = app
         # Configuration
         self.title("Login")
         self.geometry(f"{self.WINDOW_WIDTH}x{self.WINDOW_HEIGHT}")
@@ -52,7 +52,7 @@ class LoginWindow(ctk.CTkToplevel):
                         self.error_label.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
                         
                         self.withdraw()
-                        start_admin_session(self.master, validated=True)
+                        start_admin_session(self.app, user, validated=True)
 
                         return
             with open(LEKARI_JSON_PATH, 'r') as file:
