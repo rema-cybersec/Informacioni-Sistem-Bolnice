@@ -1,0 +1,29 @@
+import os
+
+# Base Directory
+BASE_DIR= os.path.dirname(os.path.abspath(__file__))
+
+# Data Directory
+DATA_DIR = os.path.join(BASE_DIR, 'data')
+ADMINS_JSON_PATH = os.path.join(DATA_DIR, 'admins.json')
+LEKARI_JSON_PATH = os.path.join(DATA_DIR, 'lekari.json')
+
+# Entities Directory
+ENTITIES_DIR = os.path.join(BASE_DIR, 'entities')
+LEKAR_CLASS_PATH = os.path.join(ENTITIES_DIR, 'Lekar.py')
+PACIJENT_CLASS_PATH = os.path.join(ENTITIES_DIR, 'Pacijent.py')
+PREGLED_CLASS_PATH = os.path.join(ENTITIES_DIR, 'Pregled.py')
+SYSADMIN_CLASS_PATH = os.path.join(ENTITIES_DIR, 'Sysadmin.py')
+
+# GUI Directory
+GUI_DIR = os.path.join(BASE_DIR, 'gui')
+LOGIN_PAGE_PATH = os.path.join(GUI_DIR, 'login.py')
+
+# Users Directory
+USERS_DIR = os.path.join(BASE_DIR, 'users')
+USER_CLASS_PATH = os.path.join(USERS_DIR, 'User.py')
+LEKAR_USER_PATH = os.path.join(USERS_DIR, 'LekarUser.py')
+SYSADMIN_USER_PATH = os.path.join(USERS_DIR, 'SysadminUser.py')
+
+# Utilities Directory
+UTILS_DIR = os.path.join(BASE_DIR, 'utils')
