@@ -1,4 +1,10 @@
 import customtkinter as ctk
+from gui.ValidateKey import ValidateKey
+from time import sleep
+from utils.Utils import get_all_admin_data
+import bcrypt
+from json import dump
+from config import ADMINS_JSON_PATH
 
 class AdminRecords(ctk.CTkToplevel):
     WINDOW_WIDTH = 750
@@ -69,7 +75,7 @@ class AdminRecords(ctk.CTkToplevel):
         self.delete_record_button = ctk.CTkButton(master=self.bottom_frame, text="Delete Record", corner_radius=15)
         self.delete_record_button.grid(row=0, column=2, sticky="nse", padx=(20, 20), pady=(20, 20))
 
-        self.update_record_button = ctk.CTkButton(master=self.bottom_frame, text="Update Record", corner_radius=15)
+        self.update_record_button = ctk.CTkButton(master=self.bottom_frame, text="Update Record", corner_radius=15, command=self.instantiate_key_check)
         self.update_record_button.grid(row=0, column=1, sticky="nse", padx=(20, 20), pady=(20, 20))
 
     def fill_data(self):
@@ -81,6 +87,27 @@ class AdminRecords(ctk.CTkToplevel):
     
     def quit_app(self):
         self.destroy()
+
+    def instantiate_key_check(self):
+        self.key_obj = ValidateKey(self)
+
+    def allow_update(self):
+        isValid = self.key_obj.isValid
+        self.key_obj.destroy()
+        if isValid:
+            self.update_record()
+    
+    def update_record(self):
+        data = get_all_admin_data()
+        altered_data = []
+        for admin in data:
+            if admin["username"] == self.username_data.cget("text"):
+                salt = bcrypt.gensalt()
+                admin["password"] = bcrypt.hashpw(self.password_data.get().encode("utf-8"), salt).decode("utf-8")
+            altered_data.append(admin)
+        with open(ADMINS_JSON_PATH, 'w') as file:
+            dump(altered_data, file)
+
 
 
 def start_session(master, admin):

@@ -16,3 +16,8 @@ def get_lekar_by_username(username: str) -> dict | None:
         if lekar["username"] == username:
             return lekar
     return None
+
+def get_all_admin_data() -> list:
+    with open(ADMINS_JSON_PATH, 'r') as file:
+        out = json.load(file)
+    return out
