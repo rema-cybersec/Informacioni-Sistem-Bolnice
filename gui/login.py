@@ -52,7 +52,7 @@ class LoginWindow(ctk.CTkToplevel):
                         self.error_label.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
                         
                         self.withdraw()
-                        start_admin_session(self.app, user, validated=True)
+                        start_admin_session(self.app, admin, validated=True)
 
                         return
             with open(LEKARI_JSON_PATH, 'r') as file:

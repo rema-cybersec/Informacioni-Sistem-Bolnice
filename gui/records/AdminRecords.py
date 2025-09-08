@@ -55,7 +55,7 @@ class AdminRecords(ctk.CTkToplevel):
         self.username_data = ctk.CTkLabel(master=self.right_frame, text="")
         self.username_data.grid(row=0, column=0, sticky="nswe", padx=(20, 20), pady=(20, 20))
 
-        self.password_data = ctk.CTkLabel(master=self.right_frame, text="")
+        self.password_data = ctk.CTkEntry(master=self.right_frame, placeholder_text="", show="*")
         self.password_data.grid(row=1, column=0, sticky="nswe", padx=(20, 20), pady=(20, 20))
     
     def initialize_bottom_frame(self):
@@ -74,7 +74,10 @@ class AdminRecords(ctk.CTkToplevel):
 
     def fill_data(self):
         self.username_data.configure(text=self.admin["username"])
-        self.password_data.configure(text=self.admin["password"])
+        hash = ""
+        for character in self.admin["password"]:
+            hash += "*"
+        self.password_data.configure(placeholder_text=hash)
     
     def quit_app(self):
         self.destroy()

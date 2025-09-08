@@ -1,7 +1,8 @@
 import customtkinter as ctk
 from config import ADMINS_JSON_PATH, LEKARI_JSON_PATH
 import json
-from gui.AdminViewRecords import start_session
+from gui.records.AdminRecords import start_session
+from utils.Utils import get_admin_by_username, get_lekar_by_username
 
 class AdminView(ctk.CTkToplevel):
     WINDOW_WIDTH=800
@@ -36,10 +37,10 @@ class AdminView(ctk.CTkToplevel):
         self.title_frame = ctk.CTkFrame(master=self.sidebar)
         self.title_frame.grid(row=1, column=0, padx=20, pady=20, sticky="new")
 
-        self.user_label = ctk.CTkLabel(master=self.title_frame, text=self.user.username, font=ctk.CTkFont(size=20, weight="bold"))
+        self.user_label = ctk.CTkLabel(master=self.title_frame, text=self.user["username"], font=ctk.CTkFont(size=20, weight="bold"))
         self.user_label.grid(row=0, column=0, padx=20, pady=(10, 10), sticky="nsew")
 
-        self.change_password = ctk.CTkButton(master=self.sidebar, corner_radius=15, text="change password")
+        self.change_password = ctk.CTkButton(master=self.sidebar, corner_radius=15, text="change password", command=self.edit_password)
         self.change_password.grid(row=3, column=0, padx=20, pady=(20, 10), sticky="sew")
 
         self.appearance_label = ctk.CTkLabel(master=self.sidebar, text="Change Appearance Mode")
@@ -98,7 +99,7 @@ class AdminView(ctk.CTkToplevel):
         self.search_button = ctk.CTkButton(master=self.button_frame, corner_radius=15, width=10, text="Search", command=self.search_users)
         self.search_button.grid(row=0, column=0, padx=(10, 10), pady=(10, 10), sticky="nsw")
 
-        self.find_button = ctk.CTkButton(master=self.button_frame, corner_radius=15, width=10, text="Find", command=self.view_records)
+        self.find_button = ctk.CTkButton(master=self.button_frame, corner_radius=15, width=10, text="View", command=self.view_records)
         self.find_button.grid(row=0, column=1, padx=(10, 10), pady=(10, 10), sticky="nsw")
 
         self.add_button = ctk.CTkButton(master=self.button_frame, corner_radius=15, width=10, text="Add")
@@ -119,28 +120,63 @@ class AdminView(ctk.CTkToplevel):
     
     def search_users(self):
         if self.tabview.get() == "Admini":
-            out = ""
+            self.initialize_choose_frame("Admini")
             with open(ADMINS_JSON_PATH, 'r') as file:
                 data = json.load(file)
+            out = []
             for admin in data:
-                out += admin["username"] + "\n"
-            if out == "":
-                out = "Nothing found."
-            self.tab_label_admini.configure(text=out)
-        elif self.tabview.get() == "Lekari":
-            out = ""
+                out.append(admin["username"])
+            if len(out) == 0:
+                self.choose_frame_admin.destroy()
+            else:
+                self.outbar_admin.configure(values=out)
+        else:
+            self.initialize_choose_frame("Lekari")
             with open(LEKARI_JSON_PATH, 'r') as file:
                 data = json.load(file)
+            out = []
             for lekar in data:
-                out += lekar["username"] + "\n"
-            if out == "":
-                out = "Nothing found."
-            self.tab_label_lekari.configure(text=out)
+                out.append(lekar["username"])
+            if len(out) == 0:
+                self.choose_frame_lekar.destroy()
+            else:
+                self.outbar_lekar.configure(values=out)
+    
+    def initialize_choose_frame(self, tab):
+        if tab == "Admini":
+            self.choose_frame_admin = ctk.CTkFrame(master=self.tab_label_admini)
+            self.choose_frame_admin.grid(row=0, column=0, sticky="new")
+
+            self.choose_frame_admin.grid_rowconfigure(0, weight=0)
+            self.choose_frame_admin.grid_columnconfigure(0, weight=1)
+
+            self.outbar_admin = ctk.CTkOptionMenu(master=self.choose_frame_admin, values=["usernames"])
+            self.outbar_admin.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew") 
         else:
-            self.tab_label_admini.configure(text=out)
-            self.tab_label_lekari.configure(text=out)
+            self.choose_frame_lekar = ctk.CTkFrame(master=self.tab_label_lekari)
+            self.choose_frame_lekar.grid(row=0, column=0, sticky="new")
+
+            self.choose_frame_lekar.grid_rowconfigure(0, weight=0)
+            self.choose_frame_lekar.grid_columnconfigure(0, weight=1)
+
+            self.outbar_lekar = ctk.CTkOptionMenu(master=self.choose_frame_lekar, values=["usernames"])
+            self.outbar_lekar.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")  
     def view_records(self):
-        start_session(self)
+        if self.tabview.get() == "Admini":
+            option = self.outbar_admin.get()
+            if option != "usernames":
+                admin = get_admin_by_username(option)
+                if admin != None:
+                    start_session(self, admin)
+        else:
+            option = self.outbar_lekar.get()
+            if option != "usernames":
+                lekar = get_lekar_by_username(option)
+                if lekar != None:
+                    start_session(self, lekar)
+    
+    def edit_password(self):
+        start_session(self, self.user)
 
 def setup():
     ctk.set_appearance_mode("Dark")
