@@ -75,7 +75,7 @@ class AdminRecords(ctk.CTkToplevel):
     def fill_data(self):
         self.username_data.configure(text=self.admin["username"])
         hash = ""
-        for character in self.admin["password"]:
+        for _ in self.admin["password"]:
             hash += "*"
         self.password_data.configure(placeholder_text=hash)
     
