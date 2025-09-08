@@ -2,6 +2,7 @@ import customtkinter as ctk
 from config import ADMINS_JSON_PATH, LEKARI_JSON_PATH
 import json
 from gui.records.AdminRecords import start_session
+from gui.AddUser import AddUser
 from utils.Utils import get_admin_by_username, get_lekar_by_username
 
 class AdminView(ctk.CTkToplevel):
@@ -102,7 +103,7 @@ class AdminView(ctk.CTkToplevel):
         self.find_button = ctk.CTkButton(master=self.button_frame, corner_radius=15, width=10, text="View", command=self.view_records)
         self.find_button.grid(row=0, column=1, padx=(10, 10), pady=(10, 10), sticky="nsw")
 
-        self.add_button = ctk.CTkButton(master=self.button_frame, corner_radius=15, width=10, text="Add")
+        self.add_button = ctk.CTkButton(master=self.button_frame, corner_radius=15, width=10, text="Add", command=self.add_user)
         self.add_button.grid(row=0, column=2, padx=(10, 10), pady=(10, 10), sticky="nsw")
 
         self.logout_button = ctk.CTkButton(master=self.button_frame, corner_radius=15, width=10, text="Logout", command=self.logout)
@@ -177,6 +178,9 @@ class AdminView(ctk.CTkToplevel):
     
     def edit_password(self):
         start_session(self, self.user)
+    
+    def add_user(self):
+        add_user_window = AddUser(self)
 
 def setup():
     ctk.set_appearance_mode("Dark")

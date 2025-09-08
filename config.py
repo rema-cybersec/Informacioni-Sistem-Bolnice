@@ -20,6 +20,7 @@ GUI_DIR = os.path.join(BASE_DIR, 'gui')
 LOGIN_PAGE_PATH = os.path.join(GUI_DIR, 'Login.py')
 ADMINVIEW_PATH = os.path.join(GUI_DIR, 'AdminView.py')
 ADMINVIEW_RECORDS_PATH = os.path.join(GUI_DIR, 'AdminViewRecords.py')
+ADD_USERS_PY_PATH = os.path.join(GUI_DIR, 'AddUser.py')
 
 # GUI/Records Directory
 GUI_RECORDS_DIR = os.path.join(GUI_DIR, 'records')
