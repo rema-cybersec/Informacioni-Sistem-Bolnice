@@ -41,9 +41,9 @@ class ValidateKey(ctk.CTkToplevel):
         else:
             self.isValid = False
         self.withdraw()
-        self.master.allow_update()
+        self.master.allow_action()
     
     def cancel(self):
         self.isValid = False
         self.withdraw()
-        self.master.allow_update()
+        self.master.allow_action()

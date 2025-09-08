@@ -91,7 +91,7 @@ class AdminRecords(ctk.CTkToplevel):
     def instantiate_key_check(self):
         self.key_obj = ValidateKey(self)
 
-    def allow_update(self):
+    def allow_action(self):
         isValid = self.key_obj.isValid
         self.key_obj.destroy()
         if isValid:
