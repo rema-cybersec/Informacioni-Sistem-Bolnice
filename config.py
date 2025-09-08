@@ -21,6 +21,10 @@ LOGIN_PAGE_PATH = os.path.join(GUI_DIR, 'Login.py')
 ADMINVIEW_PATH = os.path.join(GUI_DIR, 'AdminView.py')
 ADMINVIEW_RECORDS_PATH = os.path.join(GUI_DIR, 'AdminViewRecords.py')
 
+# GUI/Records Directory
+GUI_RECORDS_DIR = os.path.join(GUI_DIR, 'records')
+ADMIN_RECORDS_PY = os.path.join(GUI_RECORDS_DIR, 'AdminRecords.py')
+
 # Users Directory
 USERS_DIR = os.path.join(BASE_DIR, 'users')
 USER_CLASS_PATH = os.path.join(USERS_DIR, 'User.py')

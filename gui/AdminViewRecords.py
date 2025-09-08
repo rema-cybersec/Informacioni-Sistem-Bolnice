@@ -2,10 +2,11 @@ import customtkinter as ctk
 from config import ADMINS_JSON_PATH, LEKARI_JSON_PATH, COMPANY_KEY_GPG_PATH
 import json
 import base64
+from gui.records.AdminRecords import start_session as start_adminview_session
 
 class AdminViewRecords(ctk.CTkToplevel):
     WINDOW_WIDTH = 400
-    WINDOW_HEIGHT = 400
+    WINDOW_HEIGHT = 250
     ERROR_TEXT="Invalid username or password."
     ERROR_TEXT_COLOR=("red", "#CC0000")
 
@@ -61,7 +62,7 @@ class AdminViewRecords(ctk.CTkToplevel):
         else:
             key = self.key_entry.get().strip()
             if self.validate_key(key):
-                self.show_record(record, key)
+                self.show_record(record)
             else:
                 self.show_error_text()
     
@@ -72,8 +73,8 @@ class AdminViewRecords(ctk.CTkToplevel):
             return True
         return False
     
-    def show_record(self, record, key):
-        print(record)
+    def show_record(self, record):
+        start_adminview_session(self, record)
 
     def quit_app(self):
         self.destroy()
