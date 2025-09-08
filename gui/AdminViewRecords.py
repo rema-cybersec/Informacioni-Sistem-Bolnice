@@ -74,7 +74,7 @@ class AdminViewRecords(ctk.CTkToplevel):
         return False
     
     def show_record(self, record):
-        start_adminview_session(self, record)
+        start_adminview_session(self.master, record)
 
     def quit_app(self):
         self.destroy()
