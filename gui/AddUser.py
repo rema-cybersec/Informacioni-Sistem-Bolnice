@@ -129,7 +129,7 @@ class AddUser(ctk.CTkToplevel):
             self.action = "Other"
             if not (self.admin_username_data.get() == "" or self.admin_password_data.get() == ""):
                 self.action="Admin"
-                self.instantiate_key_check()    
+                self.instantiate_key_check()
         else:
             self.action = "Lekar"
             self.instantiate_key_check()
@@ -152,6 +152,7 @@ class AddUser(ctk.CTkToplevel):
                 data.append(admin)
                 with open(ADMINS_JSON_PATH, 'w') as file:
                     json.dump(data, file)
+                self.destroy()
                 return
             elif self.action == "Lekar":
                 data = get_all_lekar_data()
@@ -171,6 +172,7 @@ class AddUser(ctk.CTkToplevel):
                 data.append(lekar)
                 with open(LEKARI_JSON_PATH, 'w') as file:
                     json.dump(data, file)
+                self.destroy()
                 return
 
     def clear_bottom_frame(self):

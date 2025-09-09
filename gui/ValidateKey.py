@@ -10,6 +10,7 @@ class ValidateKey(ctk.CTkToplevel):
         super().__init__(master)
 
         self.isValid = None
+        self.key = None
 
         self.title("Key Validation")
         self.geometry(f"{self.WINDOW_WIDTH}x{self.WINDOW_HEIGHT}")

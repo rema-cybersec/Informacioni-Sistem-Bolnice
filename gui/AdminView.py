@@ -1,7 +1,8 @@
 import customtkinter as ctk
 from config import ADMINS_JSON_PATH, LEKARI_JSON_PATH
 import json
-from gui.records.AdminRecords import start_session
+from gui.records.AdminRecords import start_session as start_admin_view
+from gui.records.LekarRecords import start_session as start_lekar_view
 from gui.AddUser import AddUser
 from utils.Utils import get_admin_by_username, get_lekar_by_username
 
@@ -168,16 +169,16 @@ class AdminView(ctk.CTkToplevel):
             if option != "usernames":
                 admin = get_admin_by_username(option)
                 if admin != None:
-                    start_session(self, admin)
+                    start_admin_view(self, admin)
         else:
             option = self.outbar_lekar.get()
             if option != "usernames":
                 lekar = get_lekar_by_username(option)
                 if lekar != None:
-                    start_session(self, lekar)
+                    start_lekar_view(self, lekar)
     
     def edit_password(self):
-        start_session(self, self.user)
+        start_admin_view(self, self.user)
     
     def add_user(self):
         add_user_window = AddUser(self)
