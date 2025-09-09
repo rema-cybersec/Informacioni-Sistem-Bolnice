@@ -31,11 +31,13 @@ class ValidateKey(ctk.CTkToplevel):
 
     def confirm(self):
         key = self.key_entry.get()
+        
         if key != "":
             with open(COMPANY_KEY_GPG_PATH, 'r') as file:
                 key_hash = file.read()
             if base64.b64encode(key.encode("utf-8")) == key_hash.encode("utf-8"):
                 self.isValid = True
+                self.key = key
             else:
                 self.isValid = False
         else:

@@ -1,6 +1,6 @@
 import customtkinter as ctk
 from gui.ValidateKey import ValidateKey
-from utils.Utils import get_all_admin_data
+from utils.Utils import get_all_admin_data, get_all_lekar_data, encrypt_data
 from bcrypt import hashpw, gensalt
 from config import ADMINS_JSON_PATH, LEKARI_JSON_PATH
 import json
@@ -8,7 +8,7 @@ import json
 
 class AddUser(ctk.CTkToplevel):
     WINDOW_WIDTH = 500
-    WINDOW_HEIGHT = 600
+    WINDOW_HEIGHT = 700
     def __init__(self, master):
         super().__init__(master)
 
@@ -83,7 +83,36 @@ class AddUser(ctk.CTkToplevel):
         self.admin_password_data.grid(row=1, column=0, sticky="nswe", padx=(20, 20), pady=(20, 20))
     
     def instantiate_lekar_user_frame(self):
-        pass
+        self.lekar_user_frame = ctk.CTkFrame(master=self.bottom_frame)
+        self.lekar_user_frame.grid(row=1, column=0, sticky="nsew", padx=(20, 20), pady=(20, 20))
+
+        self.lekar_user_frame.grid_columnconfigure(0, weight=1)
+        self.lekar_user_frame.grid_rowconfigure((0, 1, 2), weight=0)
+
+        self.lekar_username_data = ctk.CTkEntry(master=self.lekar_user_frame, placeholder_text="username")
+        self.lekar_username_data.grid(row=0, column=0, sticky="nswe", padx=(20, 20), pady=(20, 20))
+
+        self.lekar_password_data = ctk.CTkEntry(master=self.lekar_user_frame, placeholder_text="password", show="*")
+        self.lekar_password_data.grid(row=1, column=0, sticky="nswe", padx=(20, 20), pady=(20, 20))
+
+        self.instantiate_lekar_encrypted_frame()
+
+    def instantiate_lekar_encrypted_frame(self):
+        self.lekar_encrypted_frame = ctk.CTkFrame(master=self.lekar_user_frame)
+        self.lekar_encrypted_frame.grid(row=2, column=0, sticky="nsew", padx=(20, 20), pady=(20, 20))
+
+        self.lekar_encrypted_frame.grid_columnconfigure(0, weight=1)
+        self.lekar_encrypted_frame.grid_rowconfigure((0, 1), weight=0)
+        self.lekar_encrypted_frame.grid_rowconfigure(2, weight=1)
+
+        self.lekar_ime_entry = ctk.CTkEntry(master=self.lekar_encrypted_frame, placeholder_text="ime")
+        self.lekar_ime_entry.grid(row=0, column=0, sticky="nswe", padx=(20, 20), pady=(20, 20))
+
+        self.lekar_prezime_entry = ctk.CTkEntry(master=self.lekar_encrypted_frame, placeholder_text="prezime")
+        self.lekar_prezime_entry.grid(row=1, column=0, sticky="nswe", padx=(20, 20), pady=(20, 20))
+
+        self.lekar_spec_entry = ctk.CTkEntry(master=self.lekar_encrypted_frame, placeholder_text="specijalizacija")
+        self.lekar_spec_entry.grid(row=2, column=0, sticky="nswe", padx=(20, 20), pady=(20, 20))
 
     def instantiate_key_check(self):
         self.key_obj = ValidateKey(self)
@@ -102,11 +131,13 @@ class AddUser(ctk.CTkToplevel):
                 self.action="Admin"
                 self.instantiate_key_check()    
         else:
-            self.action = "Other"
+            self.action = "Lekar"
+            self.instantiate_key_check()
             return
 
     def allow_action(self):
         isValid = self.key_obj.isValid
+        secret_key = self.key_obj.key
         self.key_obj.destroy()
         if isValid:
             if self.action == "Admin":
@@ -123,6 +154,23 @@ class AddUser(ctk.CTkToplevel):
                     json.dump(data, file)
                 return
             elif self.action == "Lekar":
+                data = get_all_lekar_data()
+                encrypted_data = {
+                    "ime" : encrypt_data(self.lekar_ime_entry.get(), secret_key),
+                    "prezime" : encrypt_data(self.lekar_prezime_entry.get(), secret_key),
+                    "specijalizacija" : encrypt_data(self.lekar_spec_entry.get(), secret_key)
+                }
+                lekar = {
+                    "username" : self.lekar_username_data.get(),
+                    "password" : hashpw(
+                        self.lekar_password_data.get().encode("utf-8"),
+                        gensalt()
+                    ).decode("utf-8"),
+                    "encrypted_data" : encrypted_data,
+                }
+                data.append(lekar)
+                with open(LEKARI_JSON_PATH, 'w') as file:
+                    json.dump(data, file)
                 return
 
     def clear_bottom_frame(self):

@@ -7,7 +7,7 @@ from gui.AdminView import start_admin_session
 
 class LoginWindow(ctk.CTkToplevel):
     WINDOW_WIDTH=400
-    WINDOW_HEIGHT=250
+    WINDOW_HEIGHT=300
     ERROR_TEXT="Invalid username or password."
     ERROR_TEXT_COLOR=("red", "#CC0000")
 

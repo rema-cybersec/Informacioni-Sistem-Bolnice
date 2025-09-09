@@ -6,7 +6,7 @@ from gui.AddUser import AddUser
 from utils.Utils import get_admin_by_username, get_lekar_by_username
 
 class AdminView(ctk.CTkToplevel):
-    WINDOW_WIDTH=800
+    WINDOW_WIDTH=500
     WINDOW_HEIGHT=500
 
     def __init__(self, app, user):

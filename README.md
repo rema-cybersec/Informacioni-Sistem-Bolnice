@@ -117,9 +117,9 @@ For viewing encrypted files roles:
 	- `str`: password (*implementation*)
 	- encrypted fields:
 		- `str`: ime (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
-		- `str`: jmbg (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
 		- `str`: prezime (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
 		- `str`: specijalizacija (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
+		- `str`: jmbg (*encryped with (AES-GCM using {PBKDF2 with company key & salt} as it's key)*)
 	- `str`: salt (*base64 encrypted*)
 - **Pacijent**:
 	- `str`: jmbg (*hashed with HMAC using secret key*)
