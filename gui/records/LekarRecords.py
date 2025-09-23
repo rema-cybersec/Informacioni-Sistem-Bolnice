@@ -1,33 +1,30 @@
 import customtkinter as ctk
+from gui.records.Records import Records
 from gui.ValidateKey import ValidateKey
 from utils.Utils import get_all_lekar_data, decrypt_data, get_lekar_by_username
 import bcrypt
 from json import dump
 from config import LEKARI_JSON_PATH
 
-class LekarRecords(ctk.CTkToplevel):
+class LekarRecords(Records):
     WINDOW_WIDTH = 750
     WINDOW_HEIGHT = 600
     def __init__(self, master, lekar):
-        super().__init__(master)
-
         self.lekar = lekar
+        super().__init__(master, lekar)
 
-        self.title("Lekar Records")
-        self.geometry(f"{self.WINDOW_WIDTH}x{self.WINDOW_HEIGHT}")
-        self.attributes("-topmost", True)
-        self.protocol("WM_DELETE_WINDOW", self.quit_app)
+    def initialize_information_frame(self):
+        self.information_frame = ctk.CTkFrame(master=self)
+        self.information_frame.grid(row=0, column=0, sticky= "nsew", padx=0, pady=0)
 
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure((0, 1), weight=1)
-        self.grid_rowconfigure(2, weight=0)
+        self.information_frame.grid_rowconfigure((0, 1), weight=1)
+        self.information_frame.grid_columnconfigure(0, weight=1)
 
         self.initialize_top_frame()
         self.initialize_encrypted_frame()
-        self.initialize_bottom_frame()
     
     def initialize_top_frame(self):
-        self.top_frame = ctk.CTkFrame(master=self)
+        self.top_frame = ctk.CTkFrame(master=self.information_frame)
         self.top_frame.grid(row=0, column=0, sticky="nsew", padx=(20, 20), pady=(20, 20))
 
         self.top_frame.grid_columnconfigure(0, weight=0)
@@ -64,7 +61,7 @@ class LekarRecords(ctk.CTkToplevel):
         self.password_data.grid(row=1, column=0, sticky="nswe", padx=(20, 20), pady=(20, 20))
     
     def initialize_encrypted_frame(self):
-        self.encrypted_frame = ctk.CTkFrame(master=self)
+        self.encrypted_frame = ctk.CTkFrame(master=self.information_frame)
         self.encrypted_frame.grid(row=1, column=0, sticky="nsew", padx=(20, 20), pady=(20, 20))
 
         self.encrypted_frame.grid_rowconfigure(0, weight=1)
@@ -88,7 +85,7 @@ class LekarRecords(ctk.CTkToplevel):
         self.prezime_label = ctk.CTkLabel(master=self.encrypted_left, text="prezime:")
         self.prezime_label.grid(row=1, column=0, sticky="nsw", padx=(20, 20), pady=(20, 20))
 
-        self.prezime_label = ctk.CTkLabel(master=self.encrypted_left, text="prezime:")
+        self.prezime_label = ctk.CTkLabel(master=self.encrypted_left, text="specijalizacija:")
         self.prezime_label.grid(row=2, column=0, sticky="nsw", padx=(20, 20), pady=(20, 20))
     
     def initialize_encrypted_right(self):
@@ -107,21 +104,21 @@ class LekarRecords(ctk.CTkToplevel):
         self.spec_data = ctk.CTkLabel(master=self.encrypted_right, text="encrypted")
         self.spec_data.grid(row=2, column=0, sticky="nswe", padx=(20, 20), pady=(20, 20))
     
-    def initialize_bottom_frame(self):
-        self.bottom_frame = ctk.CTkFrame(master=self)
-        self.bottom_frame.grid(row=2, column=0, sticky="sew", padx=(20, 20), pady=(20, 20))
+    def initialize_button_frame(self):
+        self.button_frame = ctk.CTkFrame(master=self)
+        self.button_frame.grid(row=1, column=0, sticky="sew", padx=(20, 20), pady=(20, 20))
 
-        self.bottom_frame.grid_rowconfigure(0, weight=1)
-        self.bottom_frame.grid_columnconfigure(1, weight=1)
-        self.bottom_frame.grid_columnconfigure((0, 2, 3), weight=0)
+        self.button_frame.grid_rowconfigure(0, weight=1)
+        self.button_frame.grid_columnconfigure(1, weight=1)
+        self.button_frame.grid_columnconfigure((0, 2, 3), weight=0)
 
-        self.decrypt_record_button = ctk.CTkButton(master=self.bottom_frame, text="Decrypt Record", corner_radius=15, command=self.decrypt_record)
+        self.decrypt_record_button = ctk.CTkButton(master=self.button_frame, text="Decrypt Record", corner_radius=15, command=self.decrypt_record)
         self.decrypt_record_button.grid(row=0, column=0, sticky="nsw", padx=(20, 20), pady=(20, 20))
 
-        self.delete_record_button = ctk.CTkButton(master=self.bottom_frame, text="Delete Record", corner_radius=15, command=self.delete_record)
+        self.delete_record_button = ctk.CTkButton(master=self.button_frame, text="Delete Record", corner_radius=15, command=self.delete_record)
         self.delete_record_button.grid(row=0, column=3, sticky="nse", padx=(20, 20), pady=(20, 20))
 
-        self.update_record_button = ctk.CTkButton(master=self.bottom_frame, text="Update Record", corner_radius=15, command=self.alter_record)
+        self.update_record_button = ctk.CTkButton(master=self.button_frame, text="Update Record", corner_radius=15, command=self.alter_record)
         self.update_record_button.grid(row=0, column=2, sticky="nse", padx=(20, 20), pady=(20, 20))
     
     def quit_app(self):
