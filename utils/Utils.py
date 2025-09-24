@@ -136,3 +136,37 @@ def update_lekar_record(controller) -> None:
     with open(LEKARI_JSON_PATH, 'w') as file:
         json.dump(altered_data, file)
     controller.destroy()
+
+def add_admin_user(controller) -> None:
+    data = get_all_admin_data()
+    admin = {
+        "username" : controller.admin_username_data.get(),
+        "password" : bcrypt.hashpw(
+            controller.admin_password_data.get().encode("utf-8"),
+            bcrypt.gensalt()
+        ).decode("utf-8")
+    }
+    data.append(admin)
+    with open(ADMINS_JSON_PATH, 'w') as file:
+        json.dump(data, file)
+    controller.destroy()
+
+def add_lekar_user(controller, secret_key) -> None:
+    data = get_all_lekar_data()
+    encrypted_data = {
+        "ime" : encrypt_data(controller.lekar_ime_entry.get(), secret_key),
+        "prezime" : encrypt_data(controller.lekar_prezime_entry.get(), secret_key),
+        "specijalizacija" : encrypt_data(controller.lekar_spec_entry.get(), secret_key)
+    }
+    lekar = {
+        "username" : controller.lekar_username_data.get(),
+        "password" : bcrypt.hashpw(
+            controller.lekar_password_data.get().encode("utf-8"),
+            bcrypt.gensalt()
+        ).decode("utf-8"),
+        "encrypted_data" : encrypted_data,
+    }
+    data.append(lekar)
+    with open(LEKARI_JSON_PATH, 'w') as file:
+        json.dump(data, file)
+    controller.destroy()

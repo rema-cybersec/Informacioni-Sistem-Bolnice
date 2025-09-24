@@ -1,9 +1,6 @@
 import customtkinter as ctk
 from gui.ValidateKey import ValidateKey
-from utils.Utils import get_all_admin_data, get_all_lekar_data, encrypt_data
-from bcrypt import hashpw, gensalt
-from config import ADMINS_JSON_PATH, LEKARI_JSON_PATH
-import json
+from utils.Utils import add_admin_user, add_lekar_user
 
 
 class AddUser(ctk.CTkToplevel):
@@ -130,9 +127,15 @@ class AddUser(ctk.CTkToplevel):
             if not (self.admin_username_data.get() == "" or self.admin_password_data.get() == ""):
                 self.action="Admin"
                 self.instantiate_key_check()
+            return
+        elif user_type == "Lekar":
+            self.action = "Other"
+            if not (self.lekar_username_data.get() == "" or self.lekar_password_data.get() == ""):
+                self.action = "Lekar"
+                self.instantiate_key_check()
+            return
         else:
-            self.action = "Lekar"
-            self.instantiate_key_check()
+            self.action = "Other"
             return
 
     def allow_action(self):
@@ -141,38 +144,10 @@ class AddUser(ctk.CTkToplevel):
         self.key_obj.destroy()
         if isValid:
             if self.action == "Admin":
-                data = get_all_admin_data()
-                admin = {
-                    "username" : self.admin_username_data.get(),
-                    "password" : hashpw(
-                        self.admin_password_data.get().encode("utf-8"),
-                        gensalt()
-                    ).decode("utf-8")
-                }
-                data.append(admin)
-                with open(ADMINS_JSON_PATH, 'w') as file:
-                    json.dump(data, file)
-                self.destroy()
+                add_admin_user(self)
                 return
             elif self.action == "Lekar":
-                data = get_all_lekar_data()
-                encrypted_data = {
-                    "ime" : encrypt_data(self.lekar_ime_entry.get(), secret_key),
-                    "prezime" : encrypt_data(self.lekar_prezime_entry.get(), secret_key),
-                    "specijalizacija" : encrypt_data(self.lekar_spec_entry.get(), secret_key)
-                }
-                lekar = {
-                    "username" : self.lekar_username_data.get(),
-                    "password" : hashpw(
-                        self.lekar_password_data.get().encode("utf-8"),
-                        gensalt()
-                    ).decode("utf-8"),
-                    "encrypted_data" : encrypted_data,
-                }
-                data.append(lekar)
-                with open(LEKARI_JSON_PATH, 'w') as file:
-                    json.dump(data, file)
-                self.destroy()
+                add_lekar_user(self, secret_key=secret_key)
                 return
 
     def clear_bottom_frame(self):
