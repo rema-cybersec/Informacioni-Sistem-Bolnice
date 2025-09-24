@@ -6,6 +6,7 @@ from config import ADMINS_JSON_PATH, LEKARI_JSON_PATH
 import os
 import base64
 import json
+import bcrypt
 
 def get_admin_by_username(username: str) -> dict | None:
     with open(ADMINS_JSON_PATH, 'r') as file:
@@ -80,3 +81,58 @@ def decrypt_data(encrypted_data: dict, secret_key: str) -> str:
 
     decrypted_data = decryptor.update(data) + decryptor.finalize()
     return decrypted_data.decode("utf-8")
+
+            
+def delete_admin_record(controller) -> None:
+    data = get_all_admin_data()
+    altered_data = []
+    for admin in data:
+        if admin["username"] == controller.username_data.cget("text"):
+            continue
+        altered_data.append(admin)
+    with open(ADMINS_JSON_PATH, 'w') as file:
+        json.dump(altered_data, file)
+    controller.destroy()
+
+def update_admin_record(controller) -> None:
+    data = get_all_admin_data()
+    altered_data = []
+    for admin in data:
+        if admin["username"] == controller.username_data.cget("text"):
+            salt = bcrypt.gensalt()
+            admin["password"] = bcrypt.hashpw(controller.password_data.get().encode("utf-8"), salt).decode("utf-8")
+        altered_data.append(admin)
+    with open(ADMINS_JSON_PATH, 'w') as file:
+       json.dump(altered_data, file)
+    controller.destroy()
+
+def decrypt_lekar_record(controller, secret_key) -> None:
+    data = get_lekar_by_username(controller.username_data.cget("text"))
+    decrypted_data = {}
+    decrypted_data["ime"] = decrypt_data(data["encrypted_data"]["ime"], secret_key)
+    decrypted_data["prezime"] = decrypt_data(data["encrypted_data"]["prezime"], secret_key)
+    decrypted_data["specijalizacija"] = decrypt_data(data["encrypted_data"]["specijalizacija"], secret_key)
+    controller.show_decrypted_data(decrypted_data)
+
+def delete_lekar_record(controller) -> None:
+    data = get_all_lekar_data()
+    altered_data = []
+    for lekar in data:
+        if lekar["username"] == controller.username_data.cget("text"):
+            continue
+        altered_data.append(lekar)
+    with open(LEKARI_JSON_PATH, 'w') as file:
+        json.dump(altered_data, file)
+    controller.destroy()
+
+def update_lekar_record(controller) -> None:
+    data = get_all_lekar_data()
+    altered_data = []
+    for lekar in data:
+        if lekar["username"] == controller.username_data.cget("text"):
+            salt = bcrypt.gensalt()
+            lekar["password"] = bcrypt.hashpw(controller.password_data.get().encode("utf-8"), salt).decode("utf-8")
+        altered_data.append(lekar)
+    with open(LEKARI_JSON_PATH, 'w') as file:
+        json.dump(altered_data, file)
+    controller.destroy()

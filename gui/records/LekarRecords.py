@@ -1,17 +1,18 @@
 import customtkinter as ctk
 from gui.records.Records import Records
 from gui.ValidateKey import ValidateKey
-from utils.Utils import get_all_lekar_data, decrypt_data, get_lekar_by_username
-import bcrypt
-from json import dump
-from config import LEKARI_JSON_PATH
+from utils.Utils import decrypt_lekar_record, delete_lekar_record, update_lekar_record
 
 class LekarRecords(Records):
     WINDOW_WIDTH = 750
     WINDOW_HEIGHT = 600
     def __init__(self, master, lekar):
         self.lekar = lekar
+        self.key_obj = None
         super().__init__(master, lekar)
+        
+        self.title("Lekar Records")
+        self.geometry(f"{self.WINDOW_WIDTH}x{self.WINDOW_HEIGHT}")
 
     def initialize_information_frame(self):
         self.information_frame = ctk.CTkFrame(master=self)
@@ -124,64 +125,27 @@ class LekarRecords(Records):
     def quit_app(self):
         self.destroy()
 
-    def instantiate_key_check(self):
-        self.key_obj = ValidateKey(self)
-
     def delete_record(self):
         self.action="delete"
-        self.instantiate_key_check()
+        self.check_key_protocol()
     
     def alter_record(self):
         self.action="update"
-        self.instantiate_key_check()
+        self.check_key_protocol()
 
     def decrypt_record(self):
         self.action = "decrypt"
-        self.instantiate_key_check()
+        self.check_key_protocol()
 
     def allow_action(self):
-        isValid = self.key_obj.isValid
-        secret_key = self.key_obj.key
-        self.key_obj.destroy()
-        if isValid:
+        if self.key_obj.isValid:
             if self.action == "update":
-                self.update_lekar()
+                update_lekar_record(self)
             elif self.action == "delete":
-                self.delete_lekar()
+                delete_lekar_record(self)
             elif self.action == "decrypt":
-                self.decrypt_lekar(secret_key)
+                decrypt_lekar_record(self, self.key_obj.key)
         self.action="other"
-    
-    def decrypt_lekar(self, secret_key):
-        data = get_lekar_by_username(self.username_data.cget("text"))
-        decrypted_data = {}
-        decrypted_data["ime"] = decrypt_data(data["encrypted_data"]["ime"], secret_key)
-        decrypted_data["prezime"] = decrypt_data(data["encrypted_data"]["prezime"], secret_key)
-        decrypted_data["specijalizacija"] = decrypt_data(data["encrypted_data"]["specijalizacija"], secret_key)
-        self.show_decrypted_data(decrypted_data)
-            
-    def delete_lekar(self):
-        data = get_all_lekar_data()
-        altered_data = []
-        for lekar in data:
-            if lekar["username"] == self.username_data.cget("text"):
-                continue
-            altered_data.append(lekar)
-        with open(LEKARI_JSON_PATH, 'w') as file:
-            dump(altered_data, file)
-        self.destroy()
-
-    def update_lekar(self):
-        data = get_all_lekar_data()
-        altered_data = []
-        for lekar in data:
-            if lekar["username"] == self.username_data.cget("text"):
-                salt = bcrypt.gensalt()
-                lekar["password"] = bcrypt.hashpw(self.password_data.get().encode("utf-8"), salt).decode("utf-8")
-            altered_data.append(lekar)
-        with open(LEKARI_JSON_PATH, 'w') as file:
-            dump(altered_data, file)
-        self.destroy()
     
     def show_decrypted_data(self, decrypted_data):
         self.ime_data.configure(text=decrypted_data["ime"])

@@ -1,15 +1,14 @@
 import customtkinter as ctk
+from gui.ValidateKey import ValidateKey
 
 class Records(ctk.CTkToplevel):
-    WINDOW_WIDTH = 600
-    WINDOW_HEIGHT = 300
     def __init__(self, master, user):
         super().__init__(master)
 
         self.user = user
+        self.keyValidated = False
 
-        self.title("Admin Records")
-        self.geometry(f"{self.WINDOW_WIDTH}x{self.WINDOW_HEIGHT}")
+        self.title("Records")
         self.attributes("-topmost", True)
         self.protocol("WM_DELETE_WINDOW", self.quit_app)
 
@@ -25,3 +24,18 @@ class Records(ctk.CTkToplevel):
 
     def initialize_button_frame(self):
         pass
+
+    def allow_action(self):
+        pass
+
+    def instantiate_key_check(self):
+        if self.key_obj != None:
+            self.key_obj.destroy()
+        self.key_obj = ValidateKey(self)
+
+    def check_key_protocol(self):
+        if self.key_obj != None and self.key_obj.isValid == True:
+            self.key_obj.allow_noauth()
+        else:
+            self.instantiate_key_check()
+        

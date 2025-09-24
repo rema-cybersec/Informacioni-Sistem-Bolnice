@@ -50,3 +50,6 @@ class ValidateKey(ctk.CTkToplevel):
         self.isValid = False
         self.withdraw()
         self.master.allow_action()
+    
+    def allow_noauth(self):
+        self.master.allow_action()

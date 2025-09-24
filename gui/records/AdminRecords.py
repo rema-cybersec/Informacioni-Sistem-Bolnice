@@ -1,17 +1,17 @@
 import customtkinter as ctk
 from gui.records.Records import Records
-from gui.ValidateKey import ValidateKey
-from utils.Utils import get_all_admin_data
-import bcrypt
-from json import dump
-from config import ADMINS_JSON_PATH
+from utils.Utils import update_admin_record, delete_admin_record
 
 class AdminRecords(Records):
     WINDOW_WIDTH = 600
     WINDOW_HEIGHT = 300
     def __init__(self, master, admin):
         self.admin = admin
+        self.key_obj = None
         super().__init__(master, admin)
+
+        self.title("Admin Records")
+        self.geometry(f"{self.WINDOW_WIDTH}x{self.WINDOW_HEIGHT}")
 
     
     def initialize_information_frame(self):
@@ -68,50 +68,21 @@ class AdminRecords(Records):
     def quit_app(self):
         self.destroy()
 
-    def instantiate_key_check(self):
-        self.key_obj = ValidateKey(self)
-
     def delete_record(self):
         self.action="delete"
-        self.instantiate_key_check()
+        self.check_key_protocol()
     
     def alter_record(self):
         self.action="update"
-        self.instantiate_key_check()
+        self.check_key_protocol()
 
     def allow_action(self):
-        isValid = self.key_obj.isValid
-        self.key_obj.destroy()
-        if isValid:
+        if self.key_obj.isValid:
             if self.action == "update":
-                self.update_record()
+                update_admin_record(self)
             elif self.action == "delete":
-                self.delete_admin()
+                delete_admin_record(self)
         self.action="other"
-            
-    def delete_admin(self):
-        data = get_all_admin_data()
-        altered_data = []
-        for admin in data:
-            if admin["username"] == self.username_data.cget("text"):
-                continue
-            altered_data.append(admin)
-        with open(ADMINS_JSON_PATH, 'w') as file:
-            dump(altered_data, file)
-        self.destroy()
-
-    def update_record(self):
-        data = get_all_admin_data()
-        altered_data = []
-        for admin in data:
-            if admin["username"] == self.username_data.cget("text"):
-                salt = bcrypt.gensalt()
-                admin["password"] = bcrypt.hashpw(self.password_data.get().encode("utf-8"), salt).decode("utf-8")
-            altered_data.append(admin)
-        with open(ADMINS_JSON_PATH, 'w') as file:
-            dump(altered_data, file)
-        self.destroy()
-
 
 
 def start_session(master, admin):
