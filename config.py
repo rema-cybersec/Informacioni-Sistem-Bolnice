@@ -18,8 +18,6 @@ SYSADMIN_CLASS_PATH = os.path.join(ENTITIES_DIR, 'Sysadmin.py')
 # GUI Directory
 GUI_DIR = os.path.join(BASE_DIR, 'gui')
 LOGIN_PAGE_PATH = os.path.join(GUI_DIR, 'Login.py')
-VIEW_PATH = os.path.join(GUI_DIR, 'View.py')
-ADMINVIEW_PATH = os.path.join(GUI_DIR, 'AdminView.py')
 ADMINVIEW_RECORDS_PATH = os.path.join(GUI_DIR, 'AdminViewRecords.py')
 ADD_USERS_PY_PATH = os.path.join(GUI_DIR, 'AddUser.py')
 
@@ -28,6 +26,13 @@ GUI_RECORDS_DIR = os.path.join(GUI_DIR, 'records')
 RECORDS_PY = os.path.join(GUI_RECORDS_DIR, 'Records.py')
 ADMIN_RECORDS_PY = os.path.join(GUI_RECORDS_DIR, 'AdminRecords.py')
 LEKAR_RECORDS_PY = os.path.join(GUI_RECORDS_DIR, 'LekarRecords.py')
+
+# GUI/Views Directory
+VIEWS_DIR = os.path.join(GUI_DIR, 'views')
+VIEW_PATH = os.path.join(VIEWS_DIR, 'View.py')
+ADMINVIEW_PATH = os.path.join(VIEWS_DIR, 'AdminView.py')
+LEKARVIEW_PATH = os.path.join(VIEWS_DIR, 'LekarView.py')
+
 
 # Users Directory
 USERS_DIR = os.path.join(BASE_DIR, 'users')

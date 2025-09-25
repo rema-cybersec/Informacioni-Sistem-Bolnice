@@ -3,7 +3,8 @@ import json
 from bcrypt import checkpw
 from config import ADMINS_JSON_PATH, LEKARI_JSON_PATH
 from users.SysadminUser import SysadminUser
-from gui.AdminView import start_admin_session
+from gui.views.AdminView import start_admin_session
+from gui.views.LekarView import start_lekar_session
 
 class LoginWindow(ctk.CTkToplevel):
     WINDOW_WIDTH=400
@@ -62,6 +63,9 @@ class LoginWindow(ctk.CTkToplevel):
                     if(checkpw(self.password_entry.get().strip().encode('utf-8'), lekar["password"].encode('utf-8'))):
                         self.error_label = ctk.CTkLabel(master=self.placeholder_frame, text="Welcome, Lekar.", text_color=("green", "#00CC00"))
                         self.error_label.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
+
+                        self.withdraw()
+                        start_lekar_session(self.app, lekar, validated=True)
                         return
             self.show_error_text()
         else:

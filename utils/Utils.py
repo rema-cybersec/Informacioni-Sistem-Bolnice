@@ -170,3 +170,7 @@ def add_lekar_user(controller, secret_key) -> None:
     with open(LEKARI_JSON_PATH, 'w') as file:
         json.dump(data, file)
     controller.destroy()
+
+def setup_appearance_mode(ctk_controller):
+    ctk_controller.set_appearance_mode("Dark")
+    ctk_controller.set_default_color_theme("blue")
