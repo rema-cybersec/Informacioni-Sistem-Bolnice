@@ -177,7 +177,7 @@ class View(ctk.CTkToplevel):
         start_admin_view(self, self.user)
     
     def add_user(self):
-        add_user_window = AddUser(self)
+        AddUser(self)
 
 def setup():
     ctk.set_appearance_mode("Dark")
