@@ -1,8 +1,11 @@
 # Sistem Bolnice (outdated specification)
 ## by: Marko Rodic 102/23, https://www.dmi.uns.ac.rs/
-# APP LOGIN:
+# App Login:
 - admin : admin
 - lekar : lekar
+# App 2FA:
+- Admin Key : testkey
+- Lekar Key : umetnicamorabitizdrava
 # Intro
 Application is written in python 3. It has general utilities designed for hospitals such as: 
 - managing patient and doctor records, 
