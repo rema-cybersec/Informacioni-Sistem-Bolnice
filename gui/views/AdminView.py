@@ -1,5 +1,8 @@
 from gui.views.View import View
 from utils.Utils import setup_appearance_mode
+from utils.Utils import get_admin_by_username, get_lekar_by_username
+from gui.records.AdminRecords import start_session as start_admin_view
+from gui.records.LekarRecords import start_session as start_lekar_view
 import customtkinter as ctk
 
 class AdminView(View):
@@ -9,28 +12,60 @@ class AdminView(View):
         self.title("AdminView")
 
     def initialize_sidebar(self):
-        self.sidebar = ctk.CTkFrame(self)
-        self.sidebar.grid(row=0, column=0, sticky="nsw")
-        self.sidebar.grid_rowconfigure((0, 1, 3, 4, 5), weight=0)
-        self.sidebar.grid_rowconfigure(2, weight=1)
-
-        self.welcome_label = ctk.CTkLabel(master=self.sidebar, text="logged in as:")
-        self.welcome_label.grid(row=0, column=0, padx=(5, 10), pady=(5, 5), sticky="new")
-
-        self.title_frame = ctk.CTkFrame(master=self.sidebar)
-        self.title_frame.grid(row=1, column=0, padx=20, pady=20, sticky="new")
-
-        self.user_label = ctk.CTkLabel(master=self.title_frame, text=self.user["username"], font=ctk.CTkFont(size=20, weight="bold"))
-        self.user_label.grid(row=0, column=0, padx=20, pady=(10, 10), sticky="nsew")
+        super().initialize_sidebar()
 
         self.change_password = ctk.CTkButton(master=self.sidebar, corner_radius=15, text="change password", command=self.edit_password)
         self.change_password.grid(row=3, column=0, padx=20, pady=(20, 10), sticky="sew")
+    
+    def initialize_users_frame(self):
+        super().initialize_users_frame()
+        self.tabview.add("Admini")
+        self.tabview.add("Lekari")
 
-        self.appearance_label = ctk.CTkLabel(master=self.sidebar, text="Change Appearance Mode")
-        self.appearance_label.grid(row=4, column=0, padx=5, pady=(20, 5), sticky="sew")
+        self.tabview.tab("Admini").grid_columnconfigure(0, weight=1)
+        self.tabview.tab("Lekari").grid_columnconfigure(0, weight=1)
+        self.tabview.tab("Admini").grid_rowconfigure(0, weight=1)
+        self.tabview.tab("Lekari").grid_rowconfigure(0, weight=1)
 
-        self.appearance = ctk.CTkOptionMenu(master=self.sidebar, values=["Dark", "Light", "System"], command=self.change_appearance)
-        self.appearance.grid(row=5, column=0, padx=(5, 15), pady=(5, 20), sticky="sew")
+        self.tab_label_admini = ctk.CTkLabel(master=self.tabview.tab("Admini"), text="Click search to start!")
+        self.tab_label_admini.grid(row=0, column=0, padx=40, pady=20, sticky="nw")
+
+        self.tab_label_lekari = ctk.CTkLabel(master=self.tabview.tab("Lekari"), text="Click search to start!")
+        self.tab_label_lekari.grid(row=0, column=0, padx=40, pady=20, sticky="nw")
+    
+    def initialize_choose_frame(self, tab):
+        if tab == "Admini":
+            self.choose_frame_admin = ctk.CTkFrame(master=self.tab_label_admini)
+            self.choose_frame_admin.grid(row=0, column=0, sticky="new")
+
+            self.choose_frame_admin.grid_rowconfigure(0, weight=0)
+            self.choose_frame_admin.grid_columnconfigure(0, weight=1)
+
+            self.outbar_admin = ctk.CTkOptionMenu(master=self.choose_frame_admin, values=["usernames"])
+            self.outbar_admin.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew") 
+        else:
+            self.choose_frame_lekar = ctk.CTkFrame(master=self.tab_label_lekari)
+            self.choose_frame_lekar.grid(row=0, column=0, sticky="new")
+
+            self.choose_frame_lekar.grid_rowconfigure(0, weight=0)
+            self.choose_frame_lekar.grid_columnconfigure(0, weight=1)
+
+            self.outbar_lekar = ctk.CTkOptionMenu(master=self.choose_frame_lekar, values=["usernames"])
+            self.outbar_lekar.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")  
+    
+    def view_records(self):
+        if self.tabview.get() == "Admini":
+            option = self.outbar_admin.get()
+            if option != "usernames":
+                admin = get_admin_by_username(option)
+                if admin != None:
+                    start_admin_view(self, admin)
+        else:
+            option = self.outbar_lekar.get()
+            if option != "usernames":
+                lekar = get_lekar_by_username(option)
+                if lekar != None:
+                    start_lekar_view(self, lekar)
 
 def start_admin_session(app, user, validated=False):
     if validated:

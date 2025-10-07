@@ -2,7 +2,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
-from config import ADMINS_JSON_PATH, LEKARI_JSON_PATH
+from config import ADMINS_JSON_PATH, LEKARI_JSON_PATH, PACIJENTI_JSON_PATH, DIJAGNOZE_JSON_PATH
 import os
 import base64
 import json
@@ -22,6 +22,22 @@ def get_lekar_by_username(username: str) -> dict | None:
     for lekar in data:
         if lekar["username"] == username:
             return lekar
+    return None
+
+def get_pacijent_by_jmbg(jmbg: str) -> dict | None:
+    with open(PACIJENTI_JSON_PATH, 'r') as file:
+        data = json.load(file)
+    for pacijent in data:
+        if bcrypt.checkpw(str.encode("utf-8"), pacijent["jmbg"].encode("utf-8")):
+            return pacijent
+    return None
+
+def get_dijagnoza_by_sifra(sifra: str) -> dict | None:
+    with open(DIJAGNOZE_JSON_PATH, 'r') as file:
+        data = json.load(file)
+    for dijagnoza in data:
+        if dijagnoza["sifra"] == sifra:
+            return dijagnoza
     return None
 
 def get_all_admin_data() -> list:

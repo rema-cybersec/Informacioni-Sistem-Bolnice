@@ -7,6 +7,8 @@ BASE_DIR= os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 ADMINS_JSON_PATH = os.path.join(DATA_DIR, 'admins.json')
 LEKARI_JSON_PATH = os.path.join(DATA_DIR, 'lekari.json')
+PACIJENTI_JSON_PATH = os.path.join(DATA_DIR, 'pacijenti.json')
+DIJAGNOZE_JSON_PATH = os.path.join(DATA_DIR, 'dijagnoze.json')
 
 # Entities Directory
 ENTITIES_DIR = os.path.join(BASE_DIR, 'entities')
@@ -26,6 +28,8 @@ GUI_RECORDS_DIR = os.path.join(GUI_DIR, 'records')
 RECORDS_PY = os.path.join(GUI_RECORDS_DIR, 'Records.py')
 ADMIN_RECORDS_PY = os.path.join(GUI_RECORDS_DIR, 'AdminRecords.py')
 LEKAR_RECORDS_PY = os.path.join(GUI_RECORDS_DIR, 'LekarRecords.py')
+PACIJENT_RECORDS_PY = os.path.join(GUI_RECORDS_DIR, 'PacijentRecords.py')
+DIJAGNOZA_RECORDS_PY = os.path.join(GUI_RECORDS_DIR, 'DijagnozaRecords.py')
 
 # GUI/Views Directory
 VIEWS_DIR = os.path.join(GUI_DIR, 'views')

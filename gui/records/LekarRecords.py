@@ -1,6 +1,5 @@
 import customtkinter as ctk
 from gui.records.Records import Records
-from gui.ValidateKey import ValidateKey
 from utils.Utils import decrypt_lekar_record, delete_lekar_record, update_lekar_record
 
 class LekarRecords(Records):
