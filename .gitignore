@@ -14,3 +14,6 @@ gui/records/__pycache__/AdminRecords.cpython-313.pyc
 gui/views/__pycache__/LekarView.cpython-313.pyc
 .gitignore
 users/__pycache__/User.cpython-313.pyc
+gui/__pycache__/ValidateKey.cpython-313.pyc
+.gitignore
+users/__pycache__/SysadminUser.cpython-313.pyc
