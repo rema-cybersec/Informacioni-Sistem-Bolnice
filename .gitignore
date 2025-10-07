@@ -7,3 +7,10 @@ gui/records/__pycache__/Records.cpython-313.pyc
 gui/views/__pycache__/AdminView.cpython-313.pyc
 gui/views/__pycache__/View.cpython-313.pyc
 utils/__pycache__/Utils.cpython-313.pyc
+gui/__pycache__/AddUser.cpython-313.pyc
+gui/__pycache__/Login.cpython-313.pyc
+.gitignore
+gui/records/__pycache__/AdminRecords.cpython-313.pyc
+gui/views/__pycache__/LekarView.cpython-313.pyc
+.gitignore
+users/__pycache__/User.cpython-313.pyc
