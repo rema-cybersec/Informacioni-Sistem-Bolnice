@@ -1,4 +1,4 @@
-# Sistem Bolnice
+# Sistem Bolnice (outdated specification)
 ## by: Marko Rodic 102/23, https://www.dmi.uns.ac.rs/
 
 # Intro
