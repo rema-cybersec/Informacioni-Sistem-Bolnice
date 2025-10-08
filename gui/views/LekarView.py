@@ -12,6 +12,7 @@ class LekarView(View):
         self.lekar = user
         self.role = "Lekar"
         super().__init__(app, user)
+        self.title("LekarView")
     
     def initialize_users_frame(self):
         super().initialize_users_frame()

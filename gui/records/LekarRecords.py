@@ -74,9 +74,8 @@ class LekarRecords(Records):
         self.encrypted_left = ctk.CTkFrame(master=self.encrypted_frame)
         self.encrypted_left.grid(row=0, column=0, sticky="nsw", padx=(20, 20), pady=(20, 20))
 
-        self.encrypted_left.grid_rowconfigure((0, 1, 2), weight=1)
-        self.encrypted_left.grid_columnconfigure(0, weight=0)
-        self.encrypted_left.grid_columnconfigure(1, weight=1)
+        self.encrypted_left.grid_rowconfigure((0, 1, 2), weight=0)
+        self.encrypted_left.grid_columnconfigure(0, weight=1)
 
         self.ime_label = ctk.CTkLabel(master=self.encrypted_left, text="ime:")
         self.ime_label.grid(row=0, column=0, sticky="nsw", padx=(20, 20), pady=(20, 20))
@@ -91,7 +90,7 @@ class LekarRecords(Records):
         self.encrypted_right = ctk.CTkFrame(master=self.encrypted_frame)
         self.encrypted_right.grid(row=0, column=1, sticky="nsew", padx=(20, 20), pady=(20, 20))
 
-        self.encrypted_right.grid_rowconfigure((0, 1, 2), weight=1)
+        self.encrypted_right.grid_rowconfigure((0, 1, 2), weight=0)
         self.encrypted_right.grid_columnconfigure(0, weight=1)
 
         self.ime_data = ctk.CTkLabel(master=self.encrypted_right, text="encrypted")

@@ -144,6 +144,9 @@ def delete_dijagnoza_record(controller) -> None:
         json.dump(altered_data, file)
     controller.destroy()
 
+def delete_pacijent_record(controller) -> None:
+    pass
+
 def update_admin_record(controller) -> None:
     data = get_all_admin_data()
     altered_data = []
@@ -166,8 +169,7 @@ def update_dijagnoza_record(controller) -> None:
         altered_data.append(dijagnoza)
     with open(DIJAGNOZE_JSON_PATH, 'w') as file:
         json.dump(altered_data, file)
-    controller.destroy()
-        
+    controller.destroy()    
 
 def decrypt_lekar_record(controller, secret_key) -> None:
     data = get_lekar_by_username(controller.username_data.cget("text"))
@@ -176,6 +178,9 @@ def decrypt_lekar_record(controller, secret_key) -> None:
     decrypted_data["prezime"] = decrypt_data(data["encrypted_data"]["prezime"], secret_key)
     decrypted_data["specijalizacija"] = decrypt_data(data["encrypted_data"]["specijalizacija"], secret_key)
     controller.show_decrypted_data(decrypted_data)
+
+def decrypt_pacijent_record(controller, secret_key) -> None:
+    pass
 
 def delete_lekar_record(controller) -> None:
     data = get_all_lekar_data()
@@ -199,6 +204,9 @@ def update_lekar_record(controller) -> None:
     with open(LEKARI_JSON_PATH, 'w') as file:
         json.dump(altered_data, file)
     controller.destroy()
+
+def delete_pacijent_record(controller) -> None:
+    pass
 
 def add_admin_user(controller) -> None:
     data = get_all_admin_data()
