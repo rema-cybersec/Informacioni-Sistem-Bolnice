@@ -6,7 +6,6 @@ class PacijentRecords(Records):
     WINDOW_HEIGHT = 600
     def __init__(self, master, pacijent):
         self.dijagnoza = pacijent
-        self.key_obj = None
         super().__init__(master, pacijent)
         
         self.title("Pacijent Records")

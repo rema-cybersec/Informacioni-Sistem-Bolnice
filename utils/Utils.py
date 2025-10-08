@@ -133,6 +133,17 @@ def delete_admin_record(controller) -> None:
         json.dump(altered_data, file)
     controller.destroy()
 
+def delete_dijagnoza_record(controller) -> None:
+    data = get_all_dijagnoze_data()
+    altered_data = []
+    for dijagnoza in data:
+        if dijagnoza["sifra"] == controller.dijagnoza["sifra"]:
+            continue
+        altered_data.append(dijagnoza)
+    with open(DIJAGNOZE_JSON_PATH, 'w') as file:
+        json.dump(altered_data, file)
+    controller.destroy()
+
 def update_admin_record(controller) -> None:
     data = get_all_admin_data()
     altered_data = []
@@ -144,6 +155,19 @@ def update_admin_record(controller) -> None:
     with open(ADMINS_JSON_PATH, 'w') as file:
        json.dump(altered_data, file)
     controller.destroy()
+
+def update_dijagnoza_record(controller) -> None:
+    data = get_all_dijagnoze_data()
+    altered_data = []
+    for dijagnoza in data:
+        if dijagnoza["sifra"] == controller.dijagnoza["sifra"]:
+            dijagnoza["naziv"] = base64.b64encode(controller.naziv_field.get().encode("utf-8")).decode("utf-8")
+            dijagnoza["opis"] = base64.b64encode(controller.opis_field.get().encode("utf-8")).decode("utf-8")
+        altered_data.append(dijagnoza)
+    with open(DIJAGNOZE_JSON_PATH, 'w') as file:
+        json.dump(altered_data, file)
+    controller.destroy()
+        
 
 def decrypt_lekar_record(controller, secret_key) -> None:
     data = get_lekar_by_username(controller.username_data.cget("text"))

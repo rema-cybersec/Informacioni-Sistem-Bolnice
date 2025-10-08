@@ -4,6 +4,8 @@ from gui.ValidateKey import ValidateKey
 class Records(ctk.CTkToplevel):
     def __init__(self, master, user):
         super().__init__(master)
+        self.key_obj = None
+        self.role = master.role
 
         self.user = user
         self.keyValidated = False
@@ -27,6 +29,9 @@ class Records(ctk.CTkToplevel):
 
     def allow_action(self):
         pass
+
+    def quit_app(self):
+        self.destroy()
 
     def instantiate_key_check(self):
         if self.key_obj != None:

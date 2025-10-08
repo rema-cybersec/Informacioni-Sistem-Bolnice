@@ -7,7 +7,6 @@ class LekarRecords(Records):
     WINDOW_HEIGHT = 600
     def __init__(self, master, lekar):
         self.lekar = lekar
-        self.key_obj = None
         super().__init__(master, lekar)
         
         self.title("Lekar Records")
@@ -42,10 +41,10 @@ class LekarRecords(Records):
         self.left_frame.grid_columnconfigure(0, weight=0)
 
         self.username_label = ctk.CTkLabel(master=self.left_frame, text="username:")
-        self.username_label.grid(row=0, column=0, sticky="nsww", padx=(20, 20), pady=(20, 20))
+        self.username_label.grid(row=0, column=0, sticky="nsew", padx=(20, 20), pady=(20, 20))
 
         self.password_label = ctk.CTkLabel(master=self.left_frame, text="password:")
-        self.password_label.grid(row=1, column=0, sticky="nsww", padx=(20, 20), pady=(20, 20))
+        self.password_label.grid(row=1, column=0, sticky="nsew", padx=(20, 20), pady=(20, 20))
     
     def initialize_right_frame(self):
         self.right_frame = ctk.CTkFrame(master=self.top_frame)
@@ -120,9 +119,6 @@ class LekarRecords(Records):
 
         self.update_record_button = ctk.CTkButton(master=self.button_frame, text="Update Record", corner_radius=15, command=self.alter_record)
         self.update_record_button.grid(row=0, column=2, sticky="nse", padx=(20, 20), pady=(20, 20))
-    
-    def quit_app(self):
-        self.destroy()
 
     def delete_record(self):
         self.action="delete"

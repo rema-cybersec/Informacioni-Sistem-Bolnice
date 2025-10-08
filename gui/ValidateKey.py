@@ -34,7 +34,7 @@ class ValidateKey(ctk.CTkToplevel):
         key = self.key_entry.get()
         
         if key != "":
-            if self.master.role == "admin":
+            if self.master.role == "Admin":
                 with open(COMPANY_KEY_GPG_PATH, 'r') as file:
                     key_hash = file.read()
             else:

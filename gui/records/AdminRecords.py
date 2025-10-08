@@ -7,7 +7,6 @@ class AdminRecords(Records):
     WINDOW_HEIGHT = 300
     def __init__(self, master, admin):
         self.admin = admin
-        self.key_obj = None
         super().__init__(master, admin)
 
         self.title("Admin Records")
@@ -64,9 +63,6 @@ class AdminRecords(Records):
 
         self.update_record_button = ctk.CTkButton(master=self.bottom_frame, text="Update Record", corner_radius=15, command=self.alter_record)
         self.update_record_button.grid(row=0, column=1, sticky="nse", padx=(20, 20), pady=(20, 20))
-    
-    def quit_app(self):
-        self.destroy()
 
     def delete_record(self):
         self.action="delete"
