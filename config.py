@@ -10,13 +10,6 @@ LEKARI_JSON_PATH = os.path.join(DATA_DIR, 'lekari.json')
 PACIJENTI_JSON_PATH = os.path.join(DATA_DIR, 'pacijenti.json')
 DIJAGNOZE_JSON_PATH = os.path.join(DATA_DIR, 'dijagnoze.json')
 
-# Entities Directory
-ENTITIES_DIR = os.path.join(BASE_DIR, 'entities')
-LEKAR_CLASS_PATH = os.path.join(ENTITIES_DIR, 'Lekar.py')
-PACIJENT_CLASS_PATH = os.path.join(ENTITIES_DIR, 'Pacijent.py')
-PREGLED_CLASS_PATH = os.path.join(ENTITIES_DIR, 'Pregled.py')
-SYSADMIN_CLASS_PATH = os.path.join(ENTITIES_DIR, 'Sysadmin.py')
-
 # GUI Directory
 GUI_DIR = os.path.join(BASE_DIR, 'gui')
 LOGIN_PAGE_PATH = os.path.join(GUI_DIR, 'Login.py')
@@ -36,13 +29,6 @@ VIEWS_DIR = os.path.join(GUI_DIR, 'views')
 VIEW_PATH = os.path.join(VIEWS_DIR, 'View.py')
 ADMINVIEW_PATH = os.path.join(VIEWS_DIR, 'AdminView.py')
 LEKARVIEW_PATH = os.path.join(VIEWS_DIR, 'LekarView.py')
-
-
-# Users Directory
-USERS_DIR = os.path.join(BASE_DIR, 'users')
-USER_CLASS_PATH = os.path.join(USERS_DIR, 'User.py')
-LEKAR_USER_PATH = os.path.join(USERS_DIR, 'LekarUser.py')
-SYSADMIN_USER_PATH = os.path.join(USERS_DIR, 'SysadminUser.py')
 
 # Utilities Directory
 UTILS_DIR = os.path.join(BASE_DIR, 'utils')
