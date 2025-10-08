@@ -65,7 +65,7 @@ class PacijentRecords(Records):
         self.datum_rodjenja.grid(row=2, column=0, sticky="nsw", padx=(20, 20), pady=(20, 20))
 
         self.tip_krvi = ctk.CTkLabel(master=self.encrypted_left, text="tip krvi:")
-        self.tip_krvi.grid(row=2, column=0, sticky="nsw", padx=(20, 20), pady=(20, 20))        
+        self.tip_krvi.grid(row=3, column=0, sticky="nsw", padx=(20, 20), pady=(20, 20))        
     
     def initialize_encrypted_right(self):
         self.encrypted_right = ctk.CTkFrame(master=self.encrypted_frame)
@@ -84,7 +84,7 @@ class PacijentRecords(Records):
         self.datum_rodjenja_data.grid(row=2, column=0, sticky="nswe", padx=(20, 20), pady=(20, 20))
 
         self.tip_krvi_data = ctk.CTkLabel(master=self.encrypted_right, text="encrypted")
-        self.tip_krvi_data.grid(row=2, column=0, sticky="nswe", padx=(20, 20), pady=(20, 20))
+        self.tip_krvi_data.grid(row=3, column=0, sticky="nswe", padx=(20, 20), pady=(20, 20))
     
 
     def initialize_button_frame(self):
@@ -100,27 +100,24 @@ class PacijentRecords(Records):
 
         self.delete_record_button = ctk.CTkButton(master=self.button_frame, text="Delete Record", corner_radius=15, command=self.delete_record)
         self.delete_record_button.grid(row=0, column=3, sticky="nse", padx=(20, 20), pady=(20, 20))
-
-        self.update_record_button = ctk.CTkButton(master=self.button_frame, text="Update Record", corner_radius=15, command=self.alter_record)
-        self.update_record_button.grid(row=0, column=2, sticky="nse", padx=(20, 20), pady=(20, 20))
     
     def delete_record(self):
         self.action="delete"
-        self.check_key_protocol()
-    
-    def alter_record(self):
-        self.action="update"
         self.check_key_protocol()
 
     def decrypt_record(self):
         self.action = "decrypt"
         self.check_key_protocol()
+    
+    def show_decrypted_data(self, decrypted_data):
+        self.ime_data.configure(text=decrypted_data["ime"])
+        self.prezime_data.configure(text=decrypted_data["prezime"])
+        self.datum_rodjenja_data.configure(text=f"{decrypted_data["datum rodjenja"]["dan"]}/{decrypted_data["datum rodjenja"]["mesec"]}/{decrypted_data["datum rodjenja"]["godina"]}")
+        self.tip_krvi_data.configure(text=decrypted_data["tip krvi"])
 
     def allow_action(self):
         if self.key_obj.isValid:
-            if self.action == "update":
-                update_pacijent_record(self)
-            elif self.action == "delete":
+            if self.action == "delete":
                 delete_pacijent_record(self)
             elif self.action == "decrypt":
                 decrypt_pacijent_record(self, self.key_obj.key)

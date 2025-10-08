@@ -180,7 +180,16 @@ def decrypt_lekar_record(controller, secret_key) -> None:
     controller.show_decrypted_data(decrypted_data)
 
 def decrypt_pacijent_record(controller, secret_key) -> None:
-    pass
+    decrypted_data = {}
+    decrypted_data["ime"] = decrypt_data(controller.pacijent["encrypted data"]["ime"], secret_key)
+    decrypted_data["prezime"] = decrypt_data(controller.pacijent["encrypted data"]["prezime"], secret_key)
+    datum_rodjenja = {}
+    datum_rodjenja["dan"] = decrypt_data(controller.pacijent["encrypted data"]["datum rodjenja"]["dan"], secret_key)
+    datum_rodjenja["mesec"] = decrypt_data(controller.pacijent["encrypted data"]["datum rodjenja"]["mesec"], secret_key)
+    datum_rodjenja["godina"] = decrypt_data(controller.pacijent["encrypted data"]["datum rodjenja"]["godina"], secret_key)
+    decrypted_data["datum rodjenja"] = datum_rodjenja
+    decrypted_data["tip krvi"] = decrypt_data(controller.pacijent["encrypted data"]["tip krvi"], secret_key)
+    controller.show_decrypted_data(decrypted_data)
 
 def delete_lekar_record(controller) -> None:
     data = get_all_lekar_data()
