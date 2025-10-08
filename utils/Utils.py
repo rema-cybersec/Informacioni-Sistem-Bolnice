@@ -215,7 +215,15 @@ def update_lekar_record(controller) -> None:
     controller.destroy()
 
 def delete_pacijent_record(controller) -> None:
-    pass
+    data = get_all_pacijenti_data()
+    altered_data = []
+    for pacijent in data:
+        if pacijent["jmbg"] == controller.pacijent["jmbg"]:
+            continue
+        altered_data.append(pacijent)
+    with open(PACIJENTI_JSON_PATH, 'w') as file:
+        json.dump(altered_data, file)
+    controller.destroy()
 
 def add_admin_user(controller) -> None:
     data = get_all_admin_data()

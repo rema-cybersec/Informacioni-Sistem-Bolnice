@@ -188,13 +188,13 @@ class AddUser(ctk.CTkToplevel):
         self.dijagnoza_frame.grid_rowconfigure((0, 1, 2, 3), weight=0)
 
         self.sifra_field = ctk.CTkEntry(master=self.dijagnoza_frame, placeholder_text="sifra dijagnoze")
-        self.sifra_field.grid(row=0, column=0, sticky="nwe", padx=(20, 20), pady=(20, 20))
+        self.sifra_field.grid(row=0, column=0, columnspan=3, sticky="nwe", padx=(20, 20), pady=(20, 20))
 
         self.naziv_field = ctk.CTkEntry(master=self.dijagnoza_frame, placeholder_text="naziv dijagnoze")
-        self.naziv_field.grid(row=1, column=0, sticky="nwe", padx=(20, 20), pady=(20, 20))
+        self.naziv_field.grid(row=1, column=0, columnspan=3, sticky="nwe", padx=(20, 20), pady=(20, 20))
 
         self.opis_field = ctk.CTkEntry(master=self.dijagnoza_frame, placeholder_text="opis dijagnoze")
-        self.opis_field.grid(row=2, column=1, rowspan=2, sticky="swe", padx=(20, 20), pady=(20, 20))
+        self.opis_field.grid(row=2, column=0, rowspan=2, columnspan=3, sticky="swe", padx=(20, 20), pady=(20, 20))
 
     def instantiate_key_check(self):
         self.key_obj = ValidateKey(self)
