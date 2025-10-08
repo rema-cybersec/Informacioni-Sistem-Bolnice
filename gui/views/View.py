@@ -4,6 +4,7 @@ import json
 from gui.records.AdminRecords import start_session as start_admin_view
 from gui.records.LekarRecords import start_session as start_lekar_view
 from gui.AddUser import AddUser
+from gui.Stats import start_session as start_stats_session
 
 class View(ctk.CTkToplevel):
     WINDOW_WIDTH=500
@@ -28,7 +29,7 @@ class View(ctk.CTkToplevel):
     def initialize_sidebar(self):
         self.sidebar = ctk.CTkFrame(self)
         self.sidebar.grid(row=0, column=0, sticky="nsw")
-        self.sidebar.grid_rowconfigure((0, 1, 3, 4, 5), weight=0)
+        self.sidebar.grid_rowconfigure((0, 1, 3, 4, 5, 6), weight=0)
         self.sidebar.grid_rowconfigure(2, weight=1)
 
         self.welcome_label = ctk.CTkLabel(master=self.sidebar, text="logged in as:")
@@ -40,11 +41,14 @@ class View(ctk.CTkToplevel):
         self.user_label = ctk.CTkLabel(master=self.title_frame, text=self.user["username"], font=ctk.CTkFont(size=20, weight="bold"))
         self.user_label.grid(row=0, column=0, padx=20, pady=(10, 10), sticky="nsew")
 
+        self.stats = ctk.CTkButton(master=self.sidebar, corner_radius=15, text="Stats", command=self.show_stats)
+        self.stats.grid(row=3, column=0, padx=20, pady=20, sticky="sew")
+
         self.appearance_label = ctk.CTkLabel(master=self.sidebar, text="Change Appearance Mode")
-        self.appearance_label.grid(row=4, column=0, padx=5, pady=(20, 5), sticky="sew")
+        self.appearance_label.grid(row=5, column=0, padx=5, pady=(20, 5), sticky="sew")
 
         self.appearance = ctk.CTkOptionMenu(master=self.sidebar, values=["Dark", "Light", "System"], command=self.change_appearance)
-        self.appearance.grid(row=5, column=0, padx=(5, 15), pady=(5, 20), sticky="sew")  
+        self.appearance.grid(row=6, column=0, padx=(5, 15), pady=(5, 20), sticky="sew")  
     
     def initialize_master_frame(self):
         self.master_frame = ctk.CTkFrame(master=self)
@@ -109,6 +113,9 @@ class View(ctk.CTkToplevel):
 
     def view_records(self):
         pass
+
+    def show_stats(self):
+        start_stats_session(self)
     
     def edit_password(self):
         start_admin_view(self, self.user)

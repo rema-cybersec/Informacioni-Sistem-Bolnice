@@ -3,10 +3,13 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 from config import ADMINS_JSON_PATH, LEKARI_JSON_PATH, PACIJENTI_JSON_PATH, DIJAGNOZE_JSON_PATH
+from collections import Counter
 import os
 import base64
 import json
 import bcrypt
+
+CURRENT_YEAR = 2025
 
 def get_admin_by_username(username: str) -> dict | None:
     with open(ADMINS_JSON_PATH, 'r') as file:
@@ -291,6 +294,72 @@ def add_dijagnoza(controller) -> None:
     with open(DIJAGNOZE_JSON_PATH, 'w') as file:
         json.dump(data, file)
     controller.destroy()
+
+def count_admini() -> int:
+    return count_instances(ADMINS_JSON_PATH)
+
+def count_lekari() -> int:
+    return count_instances(LEKARI_JSON_PATH)
+
+def count_instances(filepath: str) -> int:
+    count = 0
+    with open(filepath, 'r') as file:
+        data = json.load(file)
+    for _ in data:
+        count += 1
+    return count
+
+def count_specijalizacije() -> tuple:
+    with open(LEKARI_JSON_PATH, 'r') as file:
+        data = json.load(file)
+    specijalizacije = []
+    for lekar in data:
+        decrypted = decrypt_data(lekar["encrypted_data"]["specijalizacija"], "testkey")
+        specijalizacije.append(decrypted)
+    return list(Counter(specijalizacije))
+
+def count_krvne_grupe() -> tuple:
+    with open(PACIJENTI_JSON_PATH, 'r') as file:
+        data = json.load(file)
+    grupe = []
+    for pacijent in data:
+        decrypted = decrypt_data(pacijent["encrypted data"]["tip krvi"], "umetnicamorabitizdrava")
+        grupe.append(decrypted)
+    return list(Counter(grupe).items())
+
+def count_godine_pacijenata() -> list:
+    with open(PACIJENTI_JSON_PATH, 'r') as file:
+        data = json.load(file)
+    godine = []
+    for pacijent in data:
+        decrypted = decrypt_data(pacijent["encrypted data"]["datum rodjenja"]["godina"], "umetnicamorabitizdrava")
+        godine.append(decrypted)
+    return godine
+
+def form_starosne_grupe(godine: list) -> tuple:
+    zeroToEleven = 0
+    elevenToEighteen = 0
+    eighteenToThirty = 0
+    thirtyToFourtyfive = 0
+    fourtysixToSixtyfive = 0
+    sixtyfivePlus = 0
+    for godina in godine:
+        godina = CURRENT_YEAR - int(godina)
+        if godina < 11:
+            zeroToEleven += 1
+        elif godina < 18:
+            elevenToEighteen += 1
+        elif godina < 30:
+            eighteenToThirty += 1
+        elif godina < 45:
+            thirtyToFourtyfive += 1
+        elif godina < 65:
+            fourtysixToSixtyfive += 1
+        else:
+            sixtyfivePlus += 1
+    return (["0-11", "11-18", "18-30", "30-45", "45-65", "65+"], [zeroToEleven, elevenToEighteen, eighteenToThirty, thirtyToFourtyfive, fourtysixToSixtyfive, sixtyfivePlus])
+
+
 
 def setup_appearance_mode(ctk_controller):
     ctk_controller.set_appearance_mode("Dark")

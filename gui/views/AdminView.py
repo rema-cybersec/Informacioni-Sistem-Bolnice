@@ -17,7 +17,7 @@ class AdminView(View):
         super().initialize_sidebar()
 
         self.change_password = ctk.CTkButton(master=self.sidebar, corner_radius=15, text="change password", command=self.edit_password)
-        self.change_password.grid(row=3, column=0, padx=20, pady=(20, 10), sticky="sew")
+        self.change_password.grid(row=4, column=0, padx=20, pady=(20, 10), sticky="sew")
     
     def initialize_users_frame(self):
         super().initialize_users_frame()
