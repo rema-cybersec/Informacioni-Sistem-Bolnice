@@ -27,8 +27,9 @@ def get_lekar_by_username(username: str) -> dict | None:
 def get_pacijent_by_jmbg(jmbg: str) -> dict | None:
     with open(PACIJENTI_JSON_PATH, 'r') as file:
         data = json.load(file)
+    hashed = base64.b64encode(jmbg.encode("utf-8"))
     for pacijent in data:
-        if bcrypt.checkpw(str.encode("utf-8"), pacijent["jmbg"].encode("utf-8")):
+        if pacijent["jmbg"].encode("utf-8") == hashed:
             return pacijent
     return None
 
@@ -41,14 +42,36 @@ def get_dijagnoza_by_sifra(sifra: str) -> dict | None:
     return None
 
 def get_all_admin_data() -> list:
-    with open(ADMINS_JSON_PATH, 'r') as file:
+    return get_all_data(ADMINS_JSON_PATH);
+
+def get_all_lekar_data() -> list:
+    return get_all_data(LEKARI_JSON_PATH);
+
+def get_all_dijagnoze_data() -> list:
+    return get_all_data(DIJAGNOZE_JSON_PATH);
+
+def get_all_pacijenti_data() -> list:
+    return get_all_data(PACIJENTI_JSON_PATH);
+
+def get_all_data(path) -> list:
+    with open(path, 'r') as file:
         out = json.load(file)
     return out
 
-def get_all_lekar_data() -> list:
-    with open(LEKARI_JSON_PATH, 'r') as file:
-        out = json.load(file)
-    return out
+def is_valid_jmbg(jmbg: str) -> bool:
+    if len(jmbg) != 13:
+        # print("length failed: " + str(len(jmbg)))
+        return False
+    if int(jmbg[0:2]) > 31 or int(jmbg[0:2]) == 0:
+        # print("days failed: " + jmbg[0:2])
+        return False
+    if int(jmbg[2:3]) > 12 or int(jmbg[2:4]) == 0:
+        # print("months failed: " + jmbg[2:4])
+        return False
+    if jmbg[7:11] not in ["8000", "8050"]:
+        # print("gender failed: " + jmbg[7:11])
+        return False
+    return True
 
 def derive_key(secret_key: str, salt: bytes, iterations: int = 1000, key_length: int = 32) -> bytes:
     kdf = PBKDF2HMAC(
@@ -184,6 +207,39 @@ def add_lekar_user(controller, secret_key) -> None:
     }
     data.append(lekar)
     with open(LEKARI_JSON_PATH, 'w') as file:
+        json.dump(data, file)
+    controller.destroy()
+
+def add_pacijent_user(controller, secret_key) -> None:
+    data = get_all_pacijenti_data()
+    encrypted_data = {
+        "ime" : encrypt_data(controller.pime_field.get(), secret_key),
+        "prezime" : encrypt_data(controller.pprz_field.get(), secret_key),
+        "tip krvi" : encrypt_data(controller.bt_field.get(), secret_key),
+        "datum rodjenja" : {
+            "dan" : encrypt_data(controller.day_cb.get(), secret_key),
+            "mesec" : encrypt_data(controller.month_cb.get(), secret_key),
+            "godina" : encrypt_data(controller.year_cb.get(), secret_key)
+        }
+    }
+    pacijent = {
+        "jmbg" : base64.b64encode(controller.jmbg_field.get().encode("utf-8")).decode("utf-8"),
+        "encrypted data" : encrypted_data
+    }
+    data.append(pacijent)
+    with open(PACIJENTI_JSON_PATH, 'w') as file:
+        json.dump(data, file)
+    controller.destroy()
+
+def add_dijagnoza(controller) -> None:
+    data = get_all_dijagnoze_data()
+    dijagnoza = {
+        "sifra" : controller.sifra_field.get(),
+        "naziv" : base64.b64encode(controller.naziv_field.get().encode("utf-8")).decode("utf-8"),
+        "opis" : base64.b64encode(controller.opis_field.get().encode("utf-8")).decode("utf-8")
+    }
+    data.append(dijagnoza)
+    with open(DIJAGNOZE_JSON_PATH, 'w') as file:
         json.dump(data, file)
     controller.destroy()
 

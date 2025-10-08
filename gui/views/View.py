@@ -102,28 +102,7 @@ class View(ctk.CTkToplevel):
         self.app.app.destroy()
     
     def search_users(self):
-        if self.tabview.get() == "Admini":
-            self.initialize_choose_frame("Admini")
-            with open(ADMINS_JSON_PATH, 'r') as file:
-                data = json.load(file)
-            out = []
-            for admin in data:
-                out.append(admin["username"])
-            if len(out) == 0:
-                self.choose_frame_admin.destroy()
-            else:
-                self.outbar_admin.configure(values=out)
-        else:
-            self.initialize_choose_frame("Lekari")
-            with open(LEKARI_JSON_PATH, 'r') as file:
-                data = json.load(file)
-            out = []
-            for lekar in data:
-                out.append(lekar["username"])
-            if len(out) == 0:
-                self.choose_frame_lekar.destroy()
-            else:
-                self.outbar_lekar.configure(values=out)
+        pass
     
     def initialize_choose_frame(self, tab):
         pass 

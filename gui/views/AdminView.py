@@ -1,12 +1,14 @@
 from gui.views.View import View
 from utils.Utils import setup_appearance_mode
 from utils.Utils import get_admin_by_username, get_lekar_by_username
+from utils.Utils import get_all_admin_data, get_all_lekar_data
 from gui.records.AdminRecords import start_session as start_admin_view
 from gui.records.LekarRecords import start_session as start_lekar_view
 import customtkinter as ctk
 
 class AdminView(View):
     def __init__(self, app, user):
+        self.role = "Admin"
         super().__init__(app, user)
         
         self.title("AdminView")
@@ -66,6 +68,27 @@ class AdminView(View):
                 lekar = get_lekar_by_username(option)
                 if lekar != None:
                     start_lekar_view(self, lekar)
+    def search_users(self):
+        if self.tabview.get() == "Admini":
+            self.initialize_choose_frame("Admini")
+            data = get_all_admin_data()
+            out = []
+            for admin in data:
+                out.append(admin["username"])
+            if len(out) == 0:
+                self.choose_frame_admin.destroy()
+            else:
+                self.outbar_admin.configure(values=out)
+        else:
+            self.initialize_choose_frame("Lekari")
+            data = get_all_lekar_data()
+            out = []
+            for lekar in data:
+                out.append(lekar["username"])
+            if len(out) == 0:
+                self.choose_frame_lekar.destroy()
+            else:
+                self.outbar_lekar.configure(values=out)
 
 def start_admin_session(app, user, validated=False):
     if validated:
