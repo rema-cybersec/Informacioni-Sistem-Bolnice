@@ -2,7 +2,6 @@ import customtkinter as ctk
 import json
 from bcrypt import checkpw
 from config import ADMINS_JSON_PATH, LEKARI_JSON_PATH
-from users.SysadminUser import SysadminUser
 from gui.views.AdminView import start_admin_session
 from gui.views.LekarView import start_lekar_session
 
@@ -47,8 +46,7 @@ class LoginWindow(ctk.CTkToplevel):
                 admins_data = json.load(file)
             for admin in admins_data:
                 if admin["username"] == self.username_entry.get().strip():
-                    user = SysadminUser(admin["username"], self.password_entry.get().strip())
-                    if user.ValidatePassword(admin):
+                    if checkpw(self.password_entry.get().strip().encode('utf-8'), admin["password"].encode('utf-8')):
                         self.error_label = ctk.CTkLabel(master=self.placeholder_frame, text="Welcome, Admin.", text_color=("green", "#00CC00"))
                         self.error_label.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
                         
@@ -60,7 +58,7 @@ class LoginWindow(ctk.CTkToplevel):
                     lekari_data = json.load(file)
             for lekar in lekari_data:
                 if lekar["username"] == self.username_entry.get().strip():
-                    if(checkpw(self.password_entry.get().strip().encode('utf-8'), lekar["password"].encode('utf-8'))):
+                    if checkpw(self.password_entry.get().strip().encode('utf-8'), lekar["password"].encode('utf-8')):
                         self.error_label = ctk.CTkLabel(master=self.placeholder_frame, text="Welcome, Lekar.", text_color=("green", "#00CC00"))
                         self.error_label.grid(row=0, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
